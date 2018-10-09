@@ -50,7 +50,7 @@
 		protected function unserialize($serializedCache, $withObj = true)
 		{
 			if (!$serializedCache)
-				return ResponseFacade::error('notFound', 'Cache not found');
+				return response()->json(['message' => 'cache not found'], 400);
 
 			$cache = $this->getSerializedCache($serializedCache);
 
