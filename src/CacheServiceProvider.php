@@ -26,13 +26,18 @@
 		 */
 		public function register()
 		{
-
 			$this->app->bind('CacheService', 'LumenServiceCache\Services\CacheService');
+			$this->app->bind('CacheFile', 'LumenServiceCache\Services\CacheRepository\FileService');
+			$this->app->bind('CacheRedis', 'LumenServiceCache\Services\CacheRepository\RedisService');
+		}
 
-			$this->app->bind('CacheFile', 'LumenServiceCache\Services\CacheRepository\CacheFile');
-			$this->app->bind('CacheRedis', 'LumenServiceCache\Services\CacheRepository\CacheRedis');
-
-			$this->app->alias('cache', 'Illuminate\Cache\CacheManager');
-
+		/**
+		 * Get the services provided by the provider.
+		 *
+		 * @return array
+		 */
+		public function provides()
+		{
+			return ['CacheService', 'CacheFile', 'CacheRedis'];
 		}
 	}

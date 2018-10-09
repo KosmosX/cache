@@ -8,9 +8,8 @@
 
 	namespace LumenCacheService\Services\CacheAbstract;
 
-	use App\Facades\ResponseFacade;
 	use Illuminate\Http\JsonResponse;
-	use \Illuminate\Http\Response;
+	use Illuminate\Http\Response;
 	use Illuminate\Support\Collection;
 
 	/**
@@ -75,7 +74,7 @@
 			$content = $response->getContent();
 
 			$type = self::RESPONSE_TYPE;
-			$data = ResponseFacade::custom(compact('content', 'status'), $status, array($headers));
+			$data =  response()->json(compact('content', 'status'), $status, array($headers));
 
 			return $this->makeSerializedCache($type, $data);
 		}
@@ -86,7 +85,7 @@
 		 */
 		protected function unserializeResponse($serializedResponse)
 		{
-			$response = ResponseFacade::custom($serializedResponse['original']['content'], $serializedResponse['original']['status'], $serializedResponse['headers']);
+			$response = response()->json($serializedResponse['original']['content'], $serializedResponse['original']['status'], $serializedResponse['headers']);
 
 			return $response;
 		}

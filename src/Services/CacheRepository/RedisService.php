@@ -8,7 +8,7 @@
 
 	namespace LumenCacheService\Services\CacheRepository;
 
-	use LumenCacheService\Services\CacheAbstract;
+	use LumenCacheService\Services\CacheAbstract\CacheAbstract;
 
 	/**
 	 * Class RedisService

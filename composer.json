@@ -18,19 +18,19 @@
 
     "autoload": {
         "psr-4": {
-            "Fabrizio-cafolla\\LumenCacheService\\": "src/"
+            "LumenCacheService\\": "src/"
         }
     },
 
     "extra": {
         "laravel": {
             "providers": [
-                "Fabrizio-cafolla\\LumenCacheService\\CacheServiceProvider"
+                "LumenCacheService\\CacheServiceProvider"
             ],
             "aliases": {
-                "CacheService": "Fabrizio-cafolla\\LumenCacheService\\Facades\\CacheService",
-                "CacheFile": "Fabrizio-cafolla\\LumenCacheService\\Facades\\CacheFile",
-                "CacheRedis": "Fabrizio-cafolla\\LumenCacheService\\Facades\\CacheRedis"
+                "CacheService": "LumenCacheService\\Facades\\CacheService",
+                "CacheFile": "LumenCacheService\\Facades\\CacheFile",
+                "CacheRedis": "LumenCacheService\\Facades\\CacheRedis"
             }
         }
     }

@@ -8,8 +8,8 @@
 
 	namespace LumenCacheService\Services;
 
-	use App\Services\Cache\CacheRepository\FileService;
-	use App\Services\Cache\CacheRepository\RedisService;
+	use LumenCacheService\Services\CacheRepository\FileService;
+	use LumenCacheService\Services\CacheRepository\RedisService;
 
 	/**
 	 * Class CacheService
