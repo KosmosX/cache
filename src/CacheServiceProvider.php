@@ -12,13 +12,12 @@
 	class CacheServiceProvider extends ServiceProvider
 	{
 		/**
-		 * Bootstrap the application services.
+		 * Indicates if loading of the provider is deferred.
 		 *
-		 * @return void
+		 * @var bool
 		 */
-		public function boot()
-		{
-		}
+		protected $defer = true;
+
 		/**
 		 * Register the application services.
 		 *
