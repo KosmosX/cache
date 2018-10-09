@@ -8,9 +8,6 @@
 
 	namespace LumenCacheService\Services;
 
-	use LumenCacheService\Services\CacheRepository\FileService;
-	use LumenCacheService\Services\CacheRepository\RedisService;
-
 	/**
 	 * Class CacheService
 	 * @package App\Services\Cache
@@ -32,7 +29,7 @@
 		 * @param FileService $fileService
 		 * @param RedisService $redisService
 		 */
-		public function __construct(FileService $fileService, RedisService $redisService)
+		public function __construct($fileService, $redisService)
 		{
 			$this->file = $fileService;
 			$this->redis = $redisService;

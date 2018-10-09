@@ -5,9 +5,13 @@
 	 * Date: 09/10/18
 	 * Time: 14.15
 	 */
+
 	namespace LumenCacheService;
 
 	use Illuminate\Support\ServiceProvider;
+	use LumenCacheService\Services\CacheService;
+	use LumenCacheService\Services\CacheRepository\FileService;
+	use LumenCacheService\Services\CacheRepository\RedisService;
 
 	class CacheServiceProvider extends ServiceProvider
 	{
@@ -18,6 +22,12 @@
 		 */
 		protected $defer = true;
 
+		public function boot()
+		{
+			$this->app->alias('cache', 'Illuminate\Cache\CacheManager');
+			$this->app->register('Illuminate\Redis\RedisServiceProvider');
+		}
+
 		/**
 		 * Register the application services.
 		 *
@@ -25,9 +35,20 @@
 		 */
 		public function register()
 		{
-			$this->app->bind('CacheService', 'LumenServiceCache\Services\CacheService');
-			$this->app->bind('CacheFile', 'LumenServiceCache\Services\CacheRepository\FileService');
-			$this->app->bind('CacheRedis', 'LumenServiceCache\Services\CacheRepository\RedisService');
+			$this->app->singleton('cache.service', function ($app) {
+				$fileService = app(FileService::class);
+				$redisService = app(RedisService::class);
+
+				return new CacheService($fileService, $redisService);
+			});
+
+			$this->app->singleton('cache.file', function ($app) {
+				return new FileService();
+			});
+
+			$this->app->singleton('cache.redis', function ($app){
+				return new RedisService();
+			});
 		}
 
 		/**
@@ -37,6 +58,6 @@
 		 */
 		public function provides()
 		{
-			return ['CacheService', 'CacheFile', 'CacheRedis'];
+			return ['cache.service', 'cache.file', 'cache.redis'];
 		}
 	}

@@ -8,8 +8,8 @@
 
 	namespace LumenCacheService\Services\CacheRepository;
 
-	use LumenCacheService\Services\CacheAbstract\CacheAbstract;
 	use Illuminate\Cache\CacheManager;
+	use LumenCacheService\Services\CacheAbstract\CacheAbstract;
 
 	/**
 	 * Class FileService
@@ -28,9 +28,9 @@
 		 * @param CacheRepository $cache
 		 * @return CacheRepository for instance in
 		 */
-		public function __construct(CacheManager $cache)
+		public function __construct()
 		{
-			$this->file = $cache;
+			$this->file = app(CacheManager::class);
 		}
 
 		/**
