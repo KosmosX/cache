@@ -1,0 +1,37 @@
+{
+    "name": "fabrizio-cafolla/lumen-cache-service",
+    "description": "Cache service for Lumen Framework.",
+    "keywords": ["framework", "laravel", "lumen", "cache", "redis", "aws-elasticache"],
+    "license": "MIT",
+    "type": "lumen-package",
+    "authors": [
+        {
+            "name": "Fabrizio Cafolla",
+            "email": "info@fabriziocafolla.com"
+        }
+    ],
+
+    "require": {
+        "illuminate/redis": "^5.6",
+        "predis/predis": "^1.1"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Fabrizio-cafolla\\LumenCacheService\\": "src/"
+        }
+    },
+
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fabrizio-cafolla\\LumenCacheService\\CacheServiceProvider"
+            ],
+            "aliases": {
+                "CacheService": "Fabrizio-cafolla\\LumenCacheService\\Facades\\CacheService",
+                "CacheFile": "Fabrizio-cafolla\\LumenCacheService\\Facades\\CacheFile",
+                "CacheRedis": "Fabrizio-cafolla\\LumenCacheService\\Facades\\CacheRedis"
+            }
+        }
+    }
+}
