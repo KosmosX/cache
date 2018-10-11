@@ -22,6 +22,8 @@
 		const RESPONSE_TYPE = 'response_type_normal';
 		const COLLECT_TYPE = 'collect_type_normal';
 
+		private $withSerlizeObj = true;
+
 		/**
 		 * Private method for serialization, implements a control to correctly cache responses.
 		 *
@@ -29,15 +31,16 @@
 		 * @param bool $withoutObj
 		 * @return string
 		 */
-		protected function serialize($data, $withObj = true)
+		protected function serialize($data)
 		{
-			if ((($data instanceof Response) || ($data instanceof JsonResponse)) && $withObj)
+			if ((($data instanceof Response) || ($data instanceof JsonResponse)) && $this->withSerlizeObj)
 				return $this->responseSerialize($data);
 
-			if (($data instanceof Collection) && $withObj)
+			if (($data instanceof Collection) && $this->withSerlizeObj)
 				return $this->serializeCollect($data);
 
 			$type = self::GENERIC_TYPE;
+
 			return $this->makeSerializedCache($type, $data);
 		}
 
@@ -47,17 +50,17 @@
 		 * @param string $serializedResponse
 		 * @return $this|string|Response|Model
 		 */
-		protected function unserialize($serializedCache, $withObj = true)
+		protected function unserialize($serializedCache)
 		{
 			if (!$serializedCache)
-				return response()->json(['message' => 'cache not found'], 400);
+				return ResponseFacade::error('notFound', 'Cache not found');
 
 			$cache = $this->getSerializedCache($serializedCache);
 
-			if (($cache['type'] === self::RESPONSE_TYPE) && $withObj)
+			if (($cache['type'] === self::RESPONSE_TYPE) && $this->withSerlizeObj)
 				return $this->unserializeResponse($cache['data']);
 
-			if (($cache['type'] === self::COLLECT_TYPE) && $withObj)
+			if (($cache['type'] === self::COLLECT_TYPE) && $this->withSerlizeObj)
 				return $this->unserializeCollect($cache['data']);
 
 			return $cache['data'];
@@ -136,4 +139,15 @@
 
 			return $cache;
 		}
+
+		public function withoutSerialize(){
+			$this->withSerlizeObj = false;
+			return $this;
+		}
+
+		public function withSerialize(){
+			$this->withSerlizeObj = true;
+			return $this;
+		}
+
 	}
