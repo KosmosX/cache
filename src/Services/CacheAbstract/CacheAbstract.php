@@ -24,6 +24,18 @@
 
 		private $withSerlizeObj = true;
 
+		public function withoutSerialize()
+		{
+			$this->withSerlizeObj = false;
+			return $this;
+		}
+
+		public function withSerialize()
+		{
+			$this->withSerlizeObj = true;
+			return $this;
+		}
+
 		/**
 		 * Private method for serialization, implements a control to correctly cache responses.
 		 *
@@ -45,28 +57,6 @@
 		}
 
 		/**
-		 * Private method that decodes the data recovered from the cache, using json decode and if the cachet data is an response will be decoded correctly
-		 *
-		 * @param string $serializedResponse
-		 * @return $this|string|Response|Model
-		 */
-		protected function unserialize($serializedCache)
-		{
-			if (!$serializedCache)
-				return ResponseFacade::error('notFound', 'Cache not found');
-
-			$cache = $this->getSerializedCache($serializedCache);
-
-			if (($cache['type'] === self::RESPONSE_TYPE) && $this->withSerlizeObj)
-				return $this->unserializeResponse($cache['data']);
-
-			if (($cache['type'] === self::COLLECT_TYPE) && $this->withSerlizeObj)
-				return $this->unserializeCollect($cache['data']);
-
-			return $cache['data'];
-		}
-
-		/**
 		 * @param $response
 		 * @return string
 		 */
@@ -77,42 +67,9 @@
 			$content = $response->getContent();
 
 			$type = self::RESPONSE_TYPE;
-			$data =  response()->json(compact('content', 'status'), $status, array($headers));
+			$data = response()->json(compact('content', 'status'), $status, array($headers));
 
 			return $this->makeSerializedCache($type, $data);
-		}
-
-		/**
-		 * @param $serializedResponse
-		 * @return mixed
-		 */
-		protected function unserializeResponse($serializedResponse)
-		{
-			$response = response()->json($serializedResponse['original']['content'], $serializedResponse['original']['status'], $serializedResponse['headers']);
-
-			return $response;
-		}
-
-		/**
-		 * @param $collect
-		 * @return string
-		 */
-		protected function serializeCollect($collect)
-		{
-			$type = self::COLLECT_TYPE;
-
-			return $this->makeSerializedCache($type, $collect);
-		}
-
-		/**
-		 * @param $serializedCollect
-		 * @return Collection
-		 */
-		protected function unserializeCollect($serializedCollect)
-		{
-			$collect = collect($serializedCollect);
-
-			return $collect;
 		}
 
 		/**
@@ -128,6 +85,44 @@
 		}
 
 		/**
+		 * @param $collect
+		 * @return string
+		 */
+		protected function serializeCollect($collect)
+		{
+			$type = self::COLLECT_TYPE;
+
+			return $this->makeSerializedCache($type, $collect);
+		}
+
+		/**
+		 * Private method that decodes the data recovered from the cache, using json decode and if the cachet data is an response will be decoded correctly
+		 *
+		 * @param string $serializedResponse
+		 * @return $this|string|Response|Model
+		 */
+		protected function unserialize($serializedCache)
+		{
+			if (!$serializedCache)
+				return response()->json([
+					"error" => [
+						"message" => "404 Not Found",
+						"status_code" => 404
+					]
+				], 404);
+
+			$cache = $this->getSerializedCache($serializedCache);
+
+			if (($cache['type'] === self::RESPONSE_TYPE) && $this->withSerlizeObj)
+				return $this->unserializeResponse($cache['data']);
+
+			if (($cache['type'] === self::COLLECT_TYPE) && $this->withSerlizeObj)
+				return $this->unserializeCollect($cache['data']);
+
+			return $cache['data'];
+		}
+
+		/**
 		 * @param $serializedCache
 		 * @return array
 		 */
@@ -140,14 +135,26 @@
 			return $cache;
 		}
 
-		public function withoutSerialize(){
-			$this->withSerlizeObj = false;
-			return $this;
+		/**
+		 * @param $serializedResponse
+		 * @return mixed
+		 */
+		protected function unserializeResponse($serializedResponse)
+		{
+			$response = response()->json($serializedResponse['original']['content'], $serializedResponse['original']['status'], $serializedResponse['headers']);
+
+			return $response;
 		}
 
-		public function withSerialize(){
-			$this->withSerlizeObj = true;
-			return $this;
+		/**
+		 * @param $serializedCollect
+		 * @return Collection
+		 */
+		protected function unserializeCollect($serializedCollect)
+		{
+			$collect = collect($serializedCollect);
+
+			return $collect;
 		}
 
 	}
