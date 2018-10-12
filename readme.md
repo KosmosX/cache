@@ -61,5 +61,15 @@ The serialization by default is performed and converts the data to json, moreove
      $cache->file->withoutSerialize()->get($key);  
      $cache->redis->withoutSerialize()->get($key);
 
+Other function:
+     
+     putMany(array $values, $minutes) //$minutes for all values
+     getMany(array $keys)
+     
+     forget(string $keys)
+     forgetMany(array $keys)
+     
+     clear()
+     
 In the next releases there will be new objects to serialize and functions for the cache with s3 and CDN assets
     
