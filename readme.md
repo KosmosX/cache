@@ -1,7 +1,7 @@
 # Lumen Cache Service
 [build] [stable]
 
-[version] [v1.1.0]
+[version] [v1.0.1]
 
 ##### Why use it?
 This package is useful for better managing the File or Redis cache. Implements the functions for creating and returning caches using json-encoded serialization to make the cache transportable and usable by other external microservices.
