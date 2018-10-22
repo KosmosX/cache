@@ -8,7 +8,7 @@
 
 	namespace LumenCacheService\Services\CacheRepository;
 
-	use LumenCacheService\Services\CacheAbstract\CacheAbstract;
+	use LumenCacheService\Services\CacheRepository\CacheAbstract;
 
 	/**
 	 * Class RedisService
@@ -52,7 +52,7 @@
 		 */
 		public function put(string $key, $data, $minutes = 0) :void
 		{
-			$serialize = $this->serialize($data);
+			$serialize = $this->serializer->serialize($data);
 			$this->redis->set($key, $serialize, $minutes);
 		}
 
@@ -79,7 +79,7 @@
 		public function get($key)
 		{
 			$data = $this->redis->get($key);
-			return $this->unserialize($data);
+			return $this->serializer->unserialize($data);
 		}
 
 		/**

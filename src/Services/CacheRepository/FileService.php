@@ -9,7 +9,7 @@
 	namespace LumenCacheService\Services\CacheRepository;
 
 	use Illuminate\Cache\CacheManager;
-	use LumenCacheService\Services\CacheAbstract\CacheAbstract;
+	use LumenCacheService\Services\CacheRepository\CacheAbstract;
 
 	/**
 	 * Class FileService
@@ -59,7 +59,7 @@
 		 */
 		public function put(string $key, $data, $minutes = 0): void
 		{
-			$serialize = $this->serialize($data);
+			$serialize = $this->serializer->serialize($data);
 			$this->file->{$minutes ? 'put' : 'forever'}($key, $serialize, $minutes);
 		}
 
@@ -86,7 +86,7 @@
 		public function get($key)
 		{
 			$data = $this->file->get($key);
-			return $this->unserialize($data);
+			return $this->serializer->unserialize($data);
 		}
 
 		/**
