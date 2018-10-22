@@ -7,8 +7,6 @@
 	 */
 
 	namespace LumenCacheService\Services;
-	use LumenCacheService\Services\CacheRepository\FileService;
-	use LumenCacheService\Services\CacheRepository\RedisService;
 
 	/**
 	 * Class CacheService
@@ -17,6 +15,24 @@
 	class CacheService
 	{
 		/**
+		 * Object of Cache class
+		 * @var CacheManager
+		 */
+		public $file;
+
+		/**
+		 * Object of Redis Class
+		 * @var Redis
+		 */
+		public $redis;
+
+		public function __construct()
+		{
+			$this->file = $this->file()->manager();
+			$this->redis = $this->redis()->manager();
+		}
+
+		/**
 		 * This method returns the class to be able to use the primitive methods and not those implemented by the Reids Cache Repository
 		 *
 		 * use into controller: $this->cache->file()-> any method that class implement
@@ -24,7 +40,7 @@
 		 * @return \Illuminate\Cache\CacheManager
 		 */
 		public function file(){
-			return app(FileService::class);
+			return app('service.cache.file');
 		}
 
 		/**
@@ -35,6 +51,6 @@
 		 * @return Redis
 		 */
 		public function redis(){
-			return app(RedisService::class);
+			return app('service.cache.redis');
 		}
 	}
