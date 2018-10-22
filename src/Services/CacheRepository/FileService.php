@@ -9,6 +9,7 @@
 	namespace LumenCacheService\Services\CacheRepository;
 
 	use Illuminate\Cache\CacheManager;
+	use LumenCacheService\Serializer\DefaultSerializer;
 	use LumenCacheService\Services\CacheRepository\CacheAbstract;
 
 	/**
@@ -17,11 +18,6 @@
 	 */
 	class FileService extends CacheAbstract
 	{
-		/**Use method for storage cache in file
-		 *
-		 * @var CacheServsice
-		 */
-		private $file;
 
 		/**
 		 * CacheService constructor.
@@ -30,7 +26,7 @@
 		 */
 		public function __construct()
 		{
-			$this->file = app(CacheManager::class);
+			parent::__construct('cache', new DefaultSerializer());
 		}
 
 		/**
@@ -60,7 +56,7 @@
 		public function put(string $key, $data, $minutes = 0): void
 		{
 			$serialize = $this->serializer->serialize($data);
-			$this->file->{$minutes ? 'put' : 'forever'}($key, $serialize, $minutes);
+			$this->manager->{$minutes ? 'put' : 'forever'}($key, $serialize, $minutes);
 		}
 
 		/**
@@ -85,7 +81,7 @@
 		 */
 		public function get($key)
 		{
-			$data = $this->file->get($key);
+			$data = $this->manager->get($key);
 			return $this->serializer->unserialize($data);
 		}
 
@@ -106,7 +102,7 @@
 		 */
 		public function forget(string $key): bool
 		{
-			return $this->file->forget($key);
+			return $this->manager->forget($key);
 		}
 
 		/**
@@ -114,14 +110,6 @@
 		 */
 		public function clear()
 		{
-			$this->file->flush();
-		}
-
-		/**
-		 * Return object file (CacheManager)
-		 */
-		public function file()
-		{
-			return $this->file;
+			$this->manager->flush();
 		}
 	}

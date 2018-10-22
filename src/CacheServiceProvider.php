@@ -36,10 +36,7 @@
 		public function register()
 		{
 			$this->app->bind('service.cache', function ($app) {
-				$fileService = app(FileService::class);
-				$redisService = app(RedisService::class);
-
-				return new CacheService($fileService, $redisService);
+				return new CacheService();
 			});
 
 			$this->app->bind('service.cache.file', function ($app) {

@@ -8,6 +8,7 @@
 
 	namespace LumenCacheService\Services\CacheRepository;
 
+	use LumenCacheService\Serializer\DefaultSerializer;
 	use LumenCacheService\Services\CacheRepository\CacheAbstract;
 
 	/**
@@ -15,17 +16,13 @@
 	 * @package App\Services\Cache\CacheRepository
 	 */
 	class RedisService extends CacheAbstract {
-		/**
-		 * @var \Laravel\Lumen\Application|mixed
-		 */
-		private $redis;
 
 		/**
 		 * RedisService constructor.
 		 */
 		public function __construct()
 		{
-			$this->redis = app('redis');
+			parent::__construct('redis', new DefaultSerializer());
 		}
 
 		/**
@@ -53,7 +50,7 @@
 		public function put(string $key, $data, $minutes = 0) :void
 		{
 			$serialize = $this->serializer->serialize($data);
-			$this->redis->set($key, $serialize, $minutes);
+			$this->manager->set($key, $serialize, $minutes);
 		}
 
 		/**
@@ -78,7 +75,7 @@
 		 */
 		public function get($key)
 		{
-			$data = $this->redis->get($key);
+			$data = $this->manager->get($key);
 			return $this->serializer->unserialize($data);
 		}
 
@@ -92,14 +89,6 @@
 		 */
 		public function forget($key): bool
 		{
-			return $this->redis->del($key);
-		}
-
-		/**
-		 * Return object redis (Redis class)
-		 */
-		public function redis()
-		{
-			return $this->redis;
+			return $this->manager->del($key);
 		}
 	}
