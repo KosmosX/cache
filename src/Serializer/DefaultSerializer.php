@@ -18,7 +18,7 @@
 		{
 			$type = self::TYPE;
 
-			$cache = $this->cacheProcessor('PUT', $type, $data);
+			$cache = $this->cacheProcessor('PUT', $data,  $type);
 
 			return $cache;
 		}

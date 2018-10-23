@@ -15,61 +15,98 @@ You must enter the following provider in the bootstrap/app.php file:
 Uncomment the function 
     
     $app->whitFacades();
-   
-Add the configuration files
+
+Load configuration in boostrap file
+
+	$this->configure('cache');
+	$this->configure('database');
+Or publish config in your Service Provider
+
+    $this->publishes([
+        'LumenCacheService/config/cache.php' => config_path('cache.php')
+    ], 'config');
     
-    $app->configure('cache');
-    $app->configure('database');
+    $this->publishes([
+        'LumenCacheService/config/database.php' => config_path('database.php')
+    ], 'config');
     
-Finally add the provider registration 
+Register service provider 
     
     $app->register(LumenCacheService\CacheServiceProvider::class);
 
 #### Documentation
-Once you have cofigured using it, it's easy to instantiate the services:
+Once you have cofigured using it:
 
-    $cache = app('cache.service');
-    $cacheFile = app('cache.file');
-    $cacheRedis = app('cache.redis');
+    $cache = app('service.cache');
+    $cacheFile = app('service.cache.file');
+    $cacheRedis = app('service.cache.redis');
  
-In the first case, an object is created that implements the use of both services and will therefore be accessible with only one entry in the cache
-    
-    $cache->file->put($key, $value, $ttl);
-    $cache->file->get($key);
-    
-    $cache->redis->put($key, $value, $ttl);
-    $cache->redis->get($key);
-    
-    $cacheRedis->put(... );
-    $cacheFile->get(... );
-    
-The serialization by default is performed and converts the data to json, moreover, a serialization system is pre-set for Response and / or Response Json objects or a Collection, when they are retrieved through the get function of the service will be again objects so you can use the methods related to the object.
 
-    //value is Response and / or Response Json or a Collection objects
-    //A json cache is created with the related data
-    $cache->file->put($key, $value, $ttl);  
-    $cache->redis->put($key, $value, $ttl);
+*PUT* function 
     
-    //The data is retrieved and the starting object is rebuilt
-    $cache->file->get($key);  
-    $cache->redis->get($key);
+    $cache->file()->put($key, $value, $ttl);    //Cache with File
+    $cache->redis()->put($key, $value, $ttl);    //Cache with Redis
     
-    //If you do not want to create the cache also serializing the object or do not want to recover it as an object, just use the following function
-     $cache->file->withoutSerialize()->put($key, $value, $ttl);  
-     $cache->redis->withoutSerialize()->put($key, $value, $ttl);
-     
-     $cache->file->withoutSerialize()->get($key);  
-     $cache->redis->withoutSerialize()->get($key);
+    $cacheRedis->put($key, $value, $ttl);
+    
+    $cacheFile->put($key, $value, $ttl);
+
+*PUT MANY*  
+
+    //array format ["key" => $value, "key2" => $value2 ...]
+    //$ttl for all values
+    $cache->file()->putMany(array $values, $ttl);
+    $cache->redis()->putMany(array $values, $ttl);
+    
+    $cacheRedis->putMany(array $values, $ttl);
+    
+    $cacheFile->putMany(array $values, $ttl);
+    
+*GET*
+
+    $cache->file()->get($key);
+    $cache->redis()->get($key);
+    
+    $cacheRedis->get($key);
+    
+    $cacheFile->get($key);
+    
+*GET MANY*
+
+    //array format ["key", "key2", "keyN" ...]
+    $cache->file()->getMany(array $keys);
+    $cache->redis()->getMany(array $keys);
+    
+    $cacheRedis->getMany(array $keys);
+    
+    $cacheFile->getMany(array $keys);
+    
+*SERIALIZATION*
+All data are stored in cache with json encode (to make the cache transportable and readable by other languages).
+Serializers can be used to construct the cache in order to rebuild it as desired.
+ 
+
+    $cache->file()->serializer(new ResponseSerializer) //if value is not instanceof Response or ResponseJson return exception
+                  ->put($key, $value, $ttl);  
+    $cache->file()->serializer(new ResponseSerializer) //it is not necessary, because DefaultSerializer is used by default
+                  ->get($key);  
+                  
+    $cache->redis()->serializer(new CollectSerializer) //if value is not instanceof Collect return exception
+                   ->put($key, $value, $ttl);  
+    $cache->redis()->serializer(new CollectSerializer)
+                   ->get($key);
+
+If you want to create your own serializer, just create a class that extends SerializerAbstract
+
+    use LumenCacheService\Serializer\SerializerAbstract;
+    
+    //$process = 'PUT' or 'GET'
+    cacheProcessor($process, $data, $type = 'default_type')
 
 Other function:
-     
-     putMany(array $values, $minutes) //$minutes for all values
-     getMany(array $keys)
-     
+          
      forget(string $keys)
      forgetMany(array $keys)
      
      clear()
-     
-In the next releases there will be new objects to serialize and functions for the cache with s3 and CDN assets
-    
+         

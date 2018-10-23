@@ -43,7 +43,7 @@
 				return new FileService();
 			});
 
-			$this->app->bind('service.cache.redis', function ($app){
+			$this->app->bind('service.cache.redis', function ($app) {
 				return new RedisService();
 			});
 		}
@@ -55,6 +55,6 @@
 		 */
 		public function provides()
 		{
-			return ['cache.service', 'cache.file', 'cache.redis'];
+			return ['service.cache', 'service.cache.file', 'service.cache.redis'];
 		}
 	}
