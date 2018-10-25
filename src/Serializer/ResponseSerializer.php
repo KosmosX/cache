@@ -14,7 +14,7 @@
 
 	class ResponseSerializer extends SerializerAbstract
 	{
-		const TYPE = 'response_type_cache';
+		const SERIALIZER = ResponseSerializer::class;
 
 		public function serialize($data)
 		{
@@ -27,13 +27,12 @@
 				'content' => $data->getContent(),
 			];
 
-			$type = self::TYPE;
-			$cache = $this->cacheProcessor('PUT', $data, $type);
+			$cache = $this->cacheProcessor('PUT', $data, self::SERIALIZER);
 
 			return $cache;
 		}
 
-		public function unserialize($data)
+		public function deserialize($data)
 		{
 			$cache = $this->cacheProcessor('GET', $data);
 

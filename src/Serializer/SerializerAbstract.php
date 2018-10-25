@@ -12,44 +12,74 @@
 
 	abstract class SerializerAbstract
 	{
+		const SERIALIZER = self::SERIALIZER;
+
 		abstract public function serialize($data);
 
-		abstract public function unserialize($data);
+		abstract public function deserialize($data);
 
 		/**
-		 * @param $serializedCache
-		 * @return array
+		 * A method for processing data to be stored or retrieved from cache.
+		 *
+		 * @param string $process (PUT or GET)
+		 * @param $data
+		 * @param string $type
+		 * @return array|string
 		 */
-		protected function cacheProcessor($process, $data, $type = 'default_type')
+		protected function cacheProcessor(string $process, $data, string $type = null)
 		{
 			if ($process === 'PUT')
 				return $this->put($data, $type);
 			else if($process === 'GET')
 				return $this->get($data);
 
-			$this->exception();
+			$this->exception('Cache is processed wrong');
 		}
 
-		protected function exception($content = 'Error serializing Cache', $status = 400){
+		/**
+		 * Function for return exception
+		 * Example: if $data is not the object we expected
+		 *
+		 * @param string $content
+		 * @param int $status
+		 */
+		protected function exception($content = 'Error serializing Cache', $status = 400) {
 			throw new HttpException($status,$content);
 		}
 
+		/**
+		 * Unpacked cache and return array with Serializer and $data
+		 *
+		 * @param $data
+		 * @return array
+		 */
 		private function get($data) {
 			$serializedData = json_decode($data, true);
-
-			$cache = ['type' => $serializedData['type'], 'data' => $serializedData['data']];
-
+			$cache = ['serializer' => $serializedData['serializer'], 'data' => $serializedData['data']];
 			return $cache;
 		}
+
 		/**
-		 * @param $type
+		 * Create array with type of Serializer and $data, in json encode
+		 *
 		 * @param $data
+		 * @param $serializer
 		 * @return string
 		 */
-		private function put($data, $type): string
+		private function put($data, $serializer): string
 		{
-			$serializedData = ['type' => $type, 'data' => $data];
-
+			$serializedData = ['serializer' => $serializer, 'data' => $data];
 			return json_encode($serializedData, JSON_FORCE_OBJECT);
+		}
+
+		/**
+		 * Get Serializer used for cached data
+		 *
+		 * @param $data
+		 * @return mixed
+		 */
+		public function getSerializer($data) :string {
+			$serialize = $this->get($data);
+			return $serialize['serializer'];
 		}
 	}

@@ -13,21 +13,19 @@
 
 	class CollectSerializer extends SerializerAbstract
 	{
-		const TYPE = 'collect_type_cache';
+		const SERIALIZER = CollectSerializer::class;
 
 		public function serialize($data)
 		{
 			if (!($data instanceof Collection))
 				$this->exception('Data is not instance of Collection');
 
-			$type = self::TYPE;
-
-			$cache = $this->cacheProcessor('PUT', $data, $type);
+			$cache = $this->cacheProcessor('PUT', $data, self::SERIALIZER);
 
 			return $cache;
 		}
 
-		public function unserialize($data)
+		public function deserialize($data)
 		{
 			$cache = $this->cacheProcessor('GET', $data);
 

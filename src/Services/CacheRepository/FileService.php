@@ -82,7 +82,8 @@
 		public function get($key)
 		{
 			$data = $this->manager->get($key);
-			return $this->serializer->unserialize($data);
+			$this->autoDetect($data);
+			return $this->serializer->deserialize($data);
 		}
 
 		/**

@@ -15,7 +15,8 @@
 	 * Class RedisService
 	 * @package App\Services\Cache\CacheRepository
 	 */
-	class RedisService extends CacheAbstract {
+	class RedisService extends CacheAbstract
+	{
 
 		/**
 		 * RedisService constructor.
@@ -32,10 +33,10 @@
 		 * @param array $values
 		 * @param int $minutes
 		 */
-		public function putMany(array $values, $minutes = 0) :void
+		public function setMany(array $values, $minutes = 0): void
 		{
 			foreach ($values as $key => $data)
-				$this->put($key, $data, $minutes);
+				$this->set($key, $data, $minutes);
 		}
 
 		/**
@@ -47,7 +48,7 @@
 		 * @param int $minutes
 		 * @return mixed
 		 */
-		public function put(string $key, $data, $minutes = 0) :void
+		public function set(string $key, $data, $minutes = 0): void
 		{
 			$serialize = $this->serializer->serialize($data);
 			$this->manager->set($key, $serialize, $minutes);
@@ -76,7 +77,8 @@
 		public function get($key)
 		{
 			$data = $this->manager->get($key);
-			return $this->serializer->unserialize($data);
+			$this->autoDetect($data);
+			return $this->serializer->deserialize($data);
 		}
 
 		/**
@@ -91,4 +93,6 @@
 		{
 			return $this->manager->del($key);
 		}
+
+
 	}
