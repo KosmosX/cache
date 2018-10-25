@@ -1,7 +1,7 @@
 # Lumen Cache Service
 [build] [stable]
 
-[version] [v1.0.1]
+[version] [v1.0.0-rc]
 
 ##### Why use it?
 This package is useful for better managing the File or Redis cache. Implements the functions for creating and returning caches using json-encoded serialization to make the cache transportable and usable by other external microservices.
@@ -104,7 +104,14 @@ If you want to create your own serializer, just create a class that extends Seri
     cacheProcessor($process, $data, $type = 'default_type')
 
 Other function:
-          
+
+     //Use class cache manager 
+     manager()->... //istance of Illuminate/Redis or CacheManager
+     $cache->redis->...		//istance in attribute
+     $cache->redis()->manager()	//create istance when called 
+     $cache->file->...
+     $cache->file()->manager()     
+     
      forget(string $keys)
      forgetMany(array $keys)
      
