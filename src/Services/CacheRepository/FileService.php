@@ -26,7 +26,7 @@
 		 */
 		public function __construct()
 		{
-			parent::__construct('cache', new DefaultSerializer());
+			parent::__construct('cache', DefaultSerializer::class);
 		}
 
 		/**

@@ -23,7 +23,7 @@
 		 */
 		public function __construct()
 		{
-			parent::__construct('redis', new DefaultSerializer());
+			parent::__construct('redis', DefaultSerializer::class);
 		}
 
 		/**
