@@ -1,5 +1,5 @@
 {
-    "name": "fabrizio-cafolla/lumen-cache-service",
+    "name": "fabrizio-cafolla/microservice-lumen-cache",
     "description": "Cache service for Lumen Framework.",
     "keywords": ["framework", "laravel", "lumen", "cache", "redis", "aws-elasticache"],
     "license": "MIT",
