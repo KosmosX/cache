@@ -6,12 +6,12 @@
 	 * Time: 14.15
 	 */
 
-	namespace LumenCacheService;
+	namespace CacheSystem;
 
 	use Illuminate\Support\ServiceProvider;
-	use LumenCacheService\Services\CacheService;
-	use LumenCacheService\Services\CacheRepository\FileService;
-	use LumenCacheService\Services\CacheRepository\RedisService;
+	use CacheSystem\Services\CacheService;
+	use CacheSystem\Services\CacheRepository\FileService;
+	use CacheSystem\Services\CacheRepository\RedisService;
 
 	class CacheServiceProvider extends ServiceProvider
 	{

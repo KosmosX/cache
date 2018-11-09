@@ -6,7 +6,7 @@
 	 * Time: 16.30
 	 */
 
-	namespace LumenCacheService\Services;
+	namespace CacheSystem\Services;
 
 	/**
 	 * Class CacheService

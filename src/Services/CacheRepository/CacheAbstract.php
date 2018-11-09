@@ -6,8 +6,8 @@
 	 * Time: 16.30
 	 */
 
-	namespace LumenCacheService\Services\CacheRepository;
-	use LumenCacheService\Serializer\DefaultSerializer;
+	namespace CacheSystem\Services\CacheRepository;
+	use CacheSystem\Serializer\DefaultSerializer;
 
 	/**
 	 * Class CacheAbstract

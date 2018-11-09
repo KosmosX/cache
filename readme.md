@@ -23,16 +23,16 @@ Load configuration in boostrap file
 Or publish config in your Service Provider
 
     $this->publishes([
-        'LumenCacheService/config/cache.php' => config_path('cache.php')
+        'CacheSystem/config/cache.php' => config_path('cache.php')
     ], 'config');
     
     $this->publishes([
-        'LumenCacheService/config/database.php' => config_path('database.php')
+        'CacheSystem/config/database.php' => config_path('database.php')
     ], 'config');
     
 Register service provider 
     
-    $app->register(LumenCacheService\CacheServiceProvider::class);
+    $app->register(CacheSystem\CacheServiceProvider::class);
 
 #### Documentation
 Once you have cofigured using it:
@@ -98,7 +98,7 @@ Serializers can be used to construct the cache in order to rebuild it as desired
 
 If you want to create your own serializer, just create a class that extends SerializerAbstract
 
-    use LumenCacheService\Serializer\SerializerAbstract;
+    use CacheSystem\Serializer\SerializerAbstract;
     
     //$process = 'PUT' or 'GET'
     cacheProcessor($process, $data, $type = 'default_type')

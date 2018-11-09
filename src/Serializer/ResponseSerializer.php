@@ -6,9 +6,9 @@
 	 * Time: 19.38
 	 */
 
-	namespace LumenCacheService\Serializer;
+	namespace CacheSystem\Serializer;
 
-	use LumenCacheService\Serializer\SerializerAbstract;
+	use CacheSystem\Serializer\SerializerAbstract;
 	use Illuminate\Http\JsonResponse;
 	use Illuminate\Http\Response;
 

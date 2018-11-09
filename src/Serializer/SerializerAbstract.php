@@ -6,7 +6,7 @@
 	 * Time: 19.39
 	 */
 
-	namespace LumenCacheService\Serializer;
+	namespace CacheSystem\Serializer;
 
 	use Symfony\Component\HttpKernel\Exception\HttpException;
 
