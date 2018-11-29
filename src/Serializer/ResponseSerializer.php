@@ -22,7 +22,7 @@
 				$this->exception('Data is not instance of Response or JsonResponse');
 
 			$data = [
-				'headers' => $data->headers,
+				'headers' => $data->headers->all(),
 				'status' => $data->getStatusCode(),
 				'content' => $data->getContent(),
 			];
