@@ -21,9 +21,9 @@
 		/**
 		 * RedisService constructor.
 		 */
-		public function __construct()
+		public function __construct(string $serializer = DefaultSerializer::class)
 		{
-			parent::__construct('redis', DefaultSerializer::class);
+			parent::__construct('redis', $serializer);
 		}
 
 		/**
@@ -48,10 +48,11 @@
 		 * @param int $minutes
 		 * @return mixed
 		 */
-		public function set(string $key, $data, $minutes = 0): void
+		public function set(string $key, $data, int $minutes = 0): void
 		{
-			$serialize = $this->serializer->serialize($data);
-			$this->manager->set($key, $serialize, $minutes);
+			$rawData = $this->_serializeData($data);
+
+			$this->manager->set($key, $rawData, $minutes);
 		}
 
 		/**
@@ -61,11 +62,12 @@
 		 * @param array $keys
 		 * @return mixed
 		 */
-		public function getMany(array $keys)
+		public function getMany(array $keys) :array
 		{
+			$data = array();
 			foreach ($keys as $key)
-				$response[$key] = $this->get($key);
-			return $response;
+				$data[$key] = $this->get($key);
+			return $data;
 		}
 
 		/**
@@ -74,11 +76,10 @@
 		 * @param $key
 		 * @return $this|string|Response
 		 */
-		public function get($key)
+		public function get($key, bool $DETECT_SERIALIZER = true)
 		{
-			$data = $this->manager->get($key);
-			$this->autoDetect($data);
-			return $this->serializer->deserialize($data);
+			$rawData = $this->manager->get($key);
+			return $this->_unserializeData($rawData,$DETECT_SERIALIZER);
 		}
 
 		/**
@@ -89,10 +90,8 @@
 		 * @param string $key
 		 * @return bool
 		 */
-		public function forget($key): bool
+		public function forget($key)
 		{
 			return $this->manager->del($key);
 		}
-
-
 	}

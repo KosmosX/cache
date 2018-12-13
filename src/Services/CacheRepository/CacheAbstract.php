@@ -7,7 +7,8 @@
 	 */
 
 	namespace CacheSystem\Services\CacheRepository;
-	use CacheSystem\Serializer\DefaultSerializer;
+
+	use CacheSystem\Traits\SerializeHelpers;
 
 	/**
 	 * Class CacheAbstract
@@ -15,12 +16,7 @@
 	 */
 	abstract class CacheAbstract
 	{
-		/**
-		 * Class of Serializer to use
-		 *
-		 * @var
-		 */
-		protected $serializer;
+		use SerializeHelpers;
 
 		/**
 		 * Is class of service that manage cache
@@ -30,61 +26,36 @@
 		protected $manager;
 
 		/**
-		 * Check if use default Serializer or not
+		 * Raw data retrieved from stored cache
 		 *
-		 * @var bool
+		 * @var string
 		 */
-		protected $defaultSerializer = false;
+		protected $rawData;
 
 		/**
-		 * RedisService constructor.
+		 * CacheAbstract constructor.
+		 *
+		 * @param string $service
+		 * @param string $serializer
 		 */
-		public function __construct($service, string $serializer)
+		public function __construct(string $service, string $serializer)
 		{
 			$this->manager = app($service);
-			$this->set($serializer);
+			$this->_setSerializer($serializer);
 		}
 
 		/**
-		 * Private function to set Serializer
-		 * @param $serializer
-		 */
-		private function set($serializer){
-			$this->serializer = new $serializer;
-		}
-
-		/**
+		 * (Alias of _setSerializer())
 		 * Serializer to use for cache
 		 *
 		 * @param $serializer
-		 * @return $this
-		 */
-		public function withSerialize($serializer)
-		{
-			$this->set($serializer);
-			return $this;
-		}
-
-		/**
-		 * Function to disable autoDetect and use DefaultSerializer
 		 *
 		 * @return $this
 		 */
-		public function withoutSerialize() {
-			$this->defaultSerializer = true;
-			return $this;
-		}
-
-		/**
-		 * Detect serializer of get cache and set serializer attr
-		 *
-		 * @param $data
-		 */
-		protected function autoDetect($data)
+		public function withSerializer($serializer): CacheAbstract
 		{
-			$serializerOfCache = $this->serializer->getSerializer($data);
-			if ($serializerOfCache != get_class($this->serializer) && !$this->defaultSerializer)
-				$this->set($serializerOfCache);
+			$this->_setSerializer($serializer);
+			return $this;
 		}
 
 		/**
@@ -95,5 +66,31 @@
 		public function manager()
 		{
 			return $this->manager;
+		}
+
+		/**
+		 * Get raw data of lastest item (put or get)
+		 *
+		 * @param bool $decode
+		 *
+		 * @return mixed|string
+		 */
+		public function getRawData(bool $decode = false)
+		{
+			return $decode ? json_decode($this->rawData, true) : $this->rawData;
+		}
+
+		/**
+		 * @param string $rawData
+		 *
+		 * @throws \Exception
+		 */
+		private function _setRawData(string $rawData)
+		{
+			json_decode($rawData);
+			if (0 !== json_last_error())
+				throw new \Exception("Serialized Data error json: " . json_last_error_msg());
+
+			$this->rawData = $rawData;
 		}
 	}

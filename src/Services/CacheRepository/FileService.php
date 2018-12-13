@@ -8,7 +8,6 @@
 
 	namespace CacheSystem\Services\CacheRepository;
 
-	use Illuminate\Cache\CacheManager;
 	use CacheSystem\Serializer\DefaultSerializer;
 	use CacheSystem\Services\CacheRepository\CacheAbstract;
 
@@ -21,12 +20,14 @@
 
 		/**
 		 * CacheService constructor.
+		 *
 		 * @param CacheRepository $cache
+		 *
 		 * @return CacheRepository for instance in
 		 */
-		public function __construct()
+		public function __construct(string $serializer = DefaultSerializer::class)
 		{
-			parent::__construct('cache', DefaultSerializer::class);
+			parent::__construct('cache', $serializer);
 		}
 
 		/**
@@ -34,10 +35,10 @@
 		 * Example ['key' => $value, 'key2' => $value2]
 		 *
 		 * @param array $values
-		 * @param $type
-		 * @param int $minutes
+		 * @param       $type
+		 * @param int   $minutes
 		 */
-		public function putMany(array $values, $minutes = 0): void
+		public function putMany(array $values, int $minutes = 0): void
 		{
 			foreach ($values as $key => $data)
 				$this->put($key, $data, $minutes);
@@ -48,46 +49,56 @@
 		 * If you want to cache response you pass the $data parameter as a Response instance
 		 *
 		 * @param string $key
-		 * @param $data
+		 * @param        $data
 		 * @param string $type
-		 * @param int $minutes
+		 * @param int    $minutes
+		 *
 		 * @return mixed
 		 */
-		public function put(string $key, $data, $minutes = 0): void
+		public function put(string $key, $data, int $minutes = NULL)
 		{
-			$serialize = $this->serializer->serialize($data);
-			$this->manager->{$minutes ? 'put' : 'forever'}($key, $serialize, $minutes);
+			$rawData = $this->_serializeData($data);
+
+			if (NULL === $minutes)
+				$this->manager->forever($key, $rawData);
+			else
+				$this->manager->put($key, $rawData, $minutes);
+
+			return $this;
 		}
 
 		/**
 		 * Method for taking multiple keys together, returns a key associative array => value
 		 *
 		 * @param array $keys
+		 *
 		 * @return mixed
 		 */
-		public function getMany(array $keys)
+		public function getMany(array $keys) :array
 		{
+			$data = array();
 			foreach ($keys as $key)
-				$response[$key] = $this->get($key);
-			return $response;
+				$data[$key] = $this->get($key);
+			return $data;
 		}
 
 		/**
 		 * Method to recover the cache from file or redis
 		 *
-		 * @param $key
+		 * @param        $key
 		 * @param string $type
+		 *
 		 * @return $this|string|BinaryFileResponse
 		 */
-		public function get($key)
+		public function get($key, bool $DETECT_SERIALIZER = true)
 		{
-			$data = $this->manager->get($key);
-			$this->autoDetect($data);
-			return $this->serializer->deserialize($data);
+			$rawData = $this->manager->get($key);
+			return $this->_unserializeData($rawData, $DETECT_SERIALIZER);
 		}
 
 		/**
 		 * Delete file cache with array key
+		 *
 		 * @param array $keys
 		 */
 		public function forgetMany(array $keys): void
@@ -98,7 +109,9 @@
 
 		/**
 		 * Delete file cache with key
+		 *
 		 * @param string $key
+		 *
 		 * @return bool
 		 */
 		public function forget(string $key): bool

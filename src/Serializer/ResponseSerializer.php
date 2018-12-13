@@ -9,8 +9,6 @@
 	namespace CacheSystem\Serializer;
 
 	use CacheSystem\Serializer\SerializerAbstract;
-	use Illuminate\Http\JsonResponse;
-	use Illuminate\Http\Response;
 
 	class ResponseSerializer extends SerializerAbstract
 	{
@@ -18,7 +16,7 @@
 
 		public function serialize($data)
 		{
-			if (!($data instanceof Response) && !($data instanceof JsonResponse))
+			if (!($data instanceof \Symfony\Component\HttpFoundation\Response))
 				$this->exception('Data is not instance of Response or JsonResponse');
 
 			$data = [
@@ -36,7 +34,7 @@
 		{
 			$cache = $this->cacheProcessor('GET', $data);
 
-			$response = response()->json(json_decode($cache['data']['content'],true), $cache['data']['status'], $cache['data']['headers']);
+			$response = response()->json($cache['data']['content'], $cache['data']['status'], $cache['data']['headers']);
 
 			return $response;
 		}
