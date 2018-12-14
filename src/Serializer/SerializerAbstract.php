@@ -9,77 +9,93 @@
 	namespace CacheSystem\Serializer;
 
 	use Symfony\Component\HttpKernel\Exception\HttpException;
+	use Carbon\Carbon;
 
 	abstract class SerializerAbstract
 	{
 		const SERIALIZER = self::SERIALIZER;
 
-		abstract public function serialize($data);
+		abstract public function make($data);
 
-		abstract public function deserialize($data);
+		abstract public function get($data);
 
 		/**
-		 * A method for processing data to be stored or retrieved from cache.
+		 * Get Serializer used for cached data
 		 *
-		 * @param string $process (PUT or GET)
-		 * @param $data
-		 * @param string $type
-		 * @return array|string
+		 * @param $rawData
+		 *
+		 * @return null|string
+		 * @throws \Exception
 		 */
-		protected function cacheProcessor(string $process, $data, string $type = null)
+		public function getSerializer($rawData): ?string
 		{
-			if ($process === 'PUT')
-				return $this->put($data, $type);
-			else if($process === 'GET')
-				return $this->get($data);
+			$data = $this->_unserialize($rawData,'serializer');
+			if (array_key_exists('serializer', $data))
+				return $data['serializer'];
 
-			$this->exception('Cache is processed wrong');
+			return NULL;
 		}
 
 		/**
-		 * Function for return exception
-		 * Example: if $data is not the object we expected
+		 * @param $rawData
 		 *
-		 * @param string $content
-		 * @param int $status
+		 * @return null|string
+		 * @throws \Exception
 		 */
-		protected function exception($content = 'Error serializing Cache', $status = 400) {
-			throw new HttpException($status,$content);
+		public function getCreateAt($rawData): ?string
+		{
+			$data = $this->_unserialize($rawData,'create_at');
+			if (array_key_exists('create_at', $data))
+				return $data['create_at'];
+
+			return NULL;
 		}
 
 		/**
-		 * Unpacked cache and return array with Serializer and $data
+		 * Unserialize cache and return array with Serializer and $data
 		 *
-		 * @param $data
+		 * @param      $rawData
+		 * @param null $only
+		 * @param bool $except
+		 *
 		 * @return array
+		 * @throws \Exception
 		 */
-		private function get($data) {
-			$serializedData = json_decode($data, true);
-			$cache = ['serializer' => $serializedData['serializer'], 'data' => $serializedData['data']];
-			return $cache;
+		protected function _unserialize($rawData, $only = NULL, bool $except = false): array
+		{
+			$data = json_decode($rawData, true);
+			if (0 !== json_last_error())
+				throw new \Exception("Serialized Data error json: " . json_last_error_msg());
+
+			if (is_array($only))
+				foreach ($only as $key)
+					if (!array_key_exists($key, $data))
+						array_forget($only, $key);
+
+			if (NULL != $only) {
+				if (true === $except)
+					return array_except($data, $only);
+				else
+					return array_only($data, $only);
+			}
+
+			return $data;
 		}
 
 		/**
 		 * Create array with type of Serializer and $data, in json encode
 		 *
-		 * @param $data
-		 * @param $serializer
-		 * @return string
-		 */
-		private function put($data, $serializer): string
-		{
-			$serializedData = ['serializer' => $serializer, 'data' => $data];
-			return json_encode($serializedData, JSON_FORCE_OBJECT);
-		}
-
-		/**
-		 * Get Serializer used for cached data
+		 * @param        $rawData
+		 * @param bool   $serialized
+		 * @param string $serializer
 		 *
-		 * @param $data
-		 * @return mixed
+		 * @return null|string
 		 */
-		public function getSerializer($data) :string {
-			$serialize = $this->get($data);
-			return $serialize['serializer'];
+		protected function _serialize($data, bool $just_raw_data = false, string $serializer = DefaultSerializer::class): ?string
+		{
+			if(false === $just_raw_data)
+				$rawData = array('serializer' => $serializer, 'data' => $data, 'created_at' => Carbon::now()->toDateTimeString());
+
+			return json_encode(isset($rawData)?$rawData:$data, JSON_FORCE_OBJECT);
 		}
 	}

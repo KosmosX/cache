@@ -31,7 +31,7 @@
 			if (true === $DETECT_SERIALIZER)
 				$this->_detectSerializer($rawData);
 
-			$data = $this->serializer->deserialize($rawData);
+			$data = $this->serializer->get($rawData);
 
 			return $data;
 		}
@@ -45,7 +45,9 @@
 		{
 			$serializer_of_cache = $this->serializer->getSerializer($rawData);
 
-			if ($serializer_of_cache !== get_class($this->serializer))
+			if (NULL === $serializer_of_cache)
+				return;
+			else if ($serializer_of_cache !== get_class($this->serializer))
 				$this->_setSerializer($serializer_of_cache);
 		}
 
@@ -55,11 +57,16 @@
 		 * @return mixed
 		 * @throws \Exception
 		 */
-		protected function _serializeData($data) :?string
+		protected function _serializeData($data): ?string
 		{
-			$rawData = $this->serializer->serialize($data);
+			$rawData = $this->serializer->make($data);
 			$this->_setRawData($rawData);
 			return $rawData;
+		}
+
+		protected function _getSerializer()
+		{
+			return $this->serializer;
 		}
 
 		/**
@@ -73,9 +80,5 @@
 				throw new \Exception("Error serializer not exist");
 
 			$this->serializer = new $serializer;
-		}
-
-		protected function _getSerializer() {
-			return $this->serializer;
 		}
 	}

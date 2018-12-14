@@ -15,22 +15,17 @@
 	{
 		const SERIALIZER = CollectSerializer::class;
 
-		public function serialize($data)
+		public function make($data)
 		{
 			if (!($data instanceof Collection))
-				$this->exception('Data is not instance of Collection');
+				throw new \Exception("Data is not instance of Collection");
 
-			$cache = $this->cacheProcessor('PUT', $data, self::SERIALIZER);
-
-			return $cache;
+			return $this->_serialize($data, false, self::SERIALIZER);
 		}
 
-		public function deserialize($data)
+		public function get($rawData)
 		{
-			$cache = $this->cacheProcessor('GET', $data);
-
-			$collect = collect($cache['data']);
-
-			return $collect;
+			$data = $this->_unserialize($rawData,'data');
+			return collect($data['data']);
 		}
 	}

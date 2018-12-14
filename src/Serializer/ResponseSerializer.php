@@ -14,10 +14,10 @@
 	{
 		const SERIALIZER = ResponseSerializer::class;
 
-		public function serialize($data)
+		public function make($data)
 		{
 			if (!($data instanceof \Symfony\Component\HttpFoundation\Response))
-				$this->exception('Data is not instance of Response or JsonResponse');
+				throw new \Exception("Data is not instance of Response");
 
 			$data = [
 				'headers' => $data->headers->all(),
@@ -25,17 +25,17 @@
 				'content' => $data->getContent(),
 			];
 
-			$cache = $this->cacheProcessor('PUT', $data, self::SERIALIZER);
-
-			return $cache;
+			return $this->_serialize($data, false,self::SERIALIZER);
 		}
 
-		public function deserialize($data)
+		public function get($rawData)
 		{
-			$cache = $this->cacheProcessor('GET', $data);
+			$data = $this->_unserialize($rawData, 'data');
+			$data = $data['data'];
 
-			$response = response()->json($cache['data']['content'], $cache['data']['status'], $cache['data']['headers']);
+			if (class_exists(\ResponseHTTP\Response\HttpResponse::class))
+				return new \ResponseHTTP\Response\HttpResponse($data['content'], $data['status'], $data['headers']);
 
-			return $response;
+			return response()->json($data['content'], $data['status'], $data['headers']);
 		}
 	}

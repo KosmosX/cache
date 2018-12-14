@@ -14,17 +14,14 @@
 	{
 		const SERIALIZER = DefaultSerializer::class;
 
-		public function serialize($data)
+		public function make($data)
 		{
-			$cache = $this->cacheProcessor('PUT', $data,  self::SERIALIZER);
-
-			return $cache;
+			return $this->_serialize($data, false, self::SERIALIZER);
 		}
 
-		public function deserialize($data)
+		public function get($rawData)
 		{
-			$cache = $this->cacheProcessor('GET', $data);
-
-			return $cache['data'];
+			$data = $this->_unserialize($rawData,'data');
+			return $data['data'];
 		}
 	}

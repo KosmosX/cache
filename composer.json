@@ -1,7 +1,7 @@
 {
     "name": "fabrizio-cafolla/cache-system",
     "description": "Cache service for Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen", "cache", "redis", "aws-elasticache"],
+    "keywords": ["framework", "laravel", "lumen", "cache", "redis"],
     "license": "MIT",
     "type": "lumen-package",
     "authors": [
