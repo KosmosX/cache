@@ -30,7 +30,7 @@
 		public function getSerializer($rawData): ?string
 		{
 			$data = $this->_unserialize($rawData,'serializer');
-			if (null === $data)
+			if (empty($data['serializer']))
 				return NULL;
 			return $data['serializer'];
 		}
@@ -74,18 +74,20 @@
 		 * @return array
 		 * @throws \Exception
 		 */
-		protected function _unserialize($rawData, $only = NULL, bool $except = false): array
+		protected function _unserialize($rawData, $only = NULL, bool $except = false): ?array
 		{
-			$data = json_decode($rawData, true);
-			if (0 !== json_last_error())
+			try {
+				$data = json_decode($rawData, true);
+			} catch (\Exception $e) {
 				throw new \Exception("Serialized Data error json: " . json_last_error_msg());
+			}
 
 			if (is_array($only))
 				foreach ($only as $key)
 					if (!array_key_exists($key, $data))
 						array_forget($only, $key);
 
-			if (NULL != $only) {
+			if (NULL != $only && !empty($data)) {
 				if (true === $except)
 					return array_except($data, $only);
 				else

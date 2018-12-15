@@ -67,8 +67,13 @@
 		 *
 		 * @throws \Exception
 		 */
-		private function _setRawData(string $rawData)
+		private function _setRawData($rawData): void
 		{
+			if (NULL === $rawData) {
+				$this->rawData = json_encode(array("serializer" => "","data"=>[],"created_at"=>""),JSON_FORCE_OBJECT);
+				return;
+			}
+
 			json_decode($rawData);
 			if (0 !== json_last_error())
 				throw new \Exception("Serialized Data error json: " . json_last_error_msg());

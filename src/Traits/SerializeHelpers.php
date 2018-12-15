@@ -29,7 +29,7 @@
 			$this->_setRawData($rawData);
 
 			if (true === $DETECT_SERIALIZER)
-				$this->_detectSerializer($rawData);
+				$this->_detectSerializer();
 
 			$data = $this->serializer->get($rawData);
 
@@ -41,9 +41,9 @@
 		 *
 		 * @param $data
 		 */
-		protected function _detectSerializer($rawData): void
+		protected function _detectSerializer(): void
 		{
-			$serializer_of_cache = $this->getSerializer($rawData);
+			$serializer_of_cache = $this->getSerializer();
 
 			if (NULL === $serializer_of_cache)
 				return;
