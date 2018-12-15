@@ -8,6 +8,7 @@
 
 	namespace CacheSystem\Services\CacheRepository;
 
+	use CacheSystem\Traits\RawDataHelpers;
 	use CacheSystem\Traits\SerializeHelpers;
 
 	/**
@@ -16,7 +17,7 @@
 	 */
 	abstract class CacheAbstract
 	{
-		use SerializeHelpers;
+		use SerializeHelpers, RawDataHelpers;
 
 		/**
 		 * Is class of service that manage cache
@@ -24,13 +25,6 @@
 		 * @var \Laravel\Lumen\Application|mixed
 		 */
 		protected $manager;
-
-		/**
-		 * Raw data retrieved from stored cache
-		 *
-		 * @var string
-		 */
-		protected $rawData;
 
 		/**
 		 * CacheAbstract constructor.
@@ -66,31 +60,5 @@
 		public function manager()
 		{
 			return $this->manager;
-		}
-
-		/**
-		 * Get raw data of lastest item (put or get)
-		 *
-		 * @param bool $decode
-		 *
-		 * @return mixed|string
-		 */
-		public function getRawData(bool $decode = false)
-		{
-			return $decode ? json_decode($this->rawData, true) : $this->rawData;
-		}
-
-		/**
-		 * @param string $rawData
-		 *
-		 * @throws \Exception
-		 */
-		private function _setRawData(string $rawData)
-		{
-			json_decode($rawData);
-			if (0 !== json_last_error())
-				throw new \Exception("Serialized Data error json: " . json_last_error_msg());
-
-			$this->rawData = $rawData;
 		}
 	}

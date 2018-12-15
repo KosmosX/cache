@@ -14,7 +14,7 @@
 	{
 		const SERIALIZER = DefaultSerializer::class;
 
-		public function make($data)
+		public function make($data): ?string
 		{
 			return $this->_serialize($data, false, self::SERIALIZER);
 		}

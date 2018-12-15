@@ -43,7 +43,7 @@
 		 */
 		protected function _detectSerializer($rawData): void
 		{
-			$serializer_of_cache = $this->serializer->getSerializer($rawData);
+			$serializer_of_cache = $this->getSerializer($rawData);
 
 			if (NULL === $serializer_of_cache)
 				return;
@@ -64,7 +64,7 @@
 			return $rawData;
 		}
 
-		protected function _getSerializer()
+		protected function _getCacheSerializer()
 		{
 			return $this->serializer;
 		}

@@ -30,10 +30,9 @@
 		public function getSerializer($rawData): ?string
 		{
 			$data = $this->_unserialize($rawData,'serializer');
-			if (array_key_exists('serializer', $data))
-				return $data['serializer'];
-
-			return NULL;
+			if (null === $data)
+				return NULL;
+			return $data['serializer'];
 		}
 
 		/**
@@ -42,13 +41,27 @@
 		 * @return null|string
 		 * @throws \Exception
 		 */
-		public function getCreateAt($rawData): ?string
+		public function getCreatedAt($rawData): ?string
 		{
-			$data = $this->_unserialize($rawData,'create_at');
-			if (array_key_exists('create_at', $data))
-				return $data['create_at'];
+			$data = $this->_unserialize($rawData,'created_at');
+			if (null === $data)
+				return NULL;
+			return $data['created_at'];
+		}
 
-			return NULL;
+		/**
+		 * @param      $rawData
+		 * @param null $only
+		 * @param bool $except
+		 *
+		 * @return array
+		 * @throws \Exception
+		 */
+		public function getArgs($rawData, $only = NULL, bool $except = false): array {
+			$args = $this->_unserialize($rawData,$only,$except);
+			if (null === $args)
+				return NULL;
+			return $args;
 		}
 
 		/**

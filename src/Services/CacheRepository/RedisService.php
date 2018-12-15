@@ -62,7 +62,7 @@
 		 * @param array $keys
 		 * @return mixed
 		 */
-		public function getMany(array $keys) :array
+		public function getMany(array $keys) : ?array
 		{
 			$data = array();
 			foreach ($keys as $key)

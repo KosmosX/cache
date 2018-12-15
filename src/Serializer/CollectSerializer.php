@@ -15,7 +15,7 @@
 	{
 		const SERIALIZER = CollectSerializer::class;
 
-		public function make($data)
+		public function make($data): ?string
 		{
 			if (!($data instanceof Collection))
 				throw new \Exception("Data is not instance of Collection");

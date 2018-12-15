@@ -14,7 +14,7 @@
 	{
 		const SERIALIZER = ResponseSerializer::class;
 
-		public function make($data)
+		public function make($data): ?string
 		{
 			if (!($data instanceof \Symfony\Component\HttpFoundation\Response))
 				throw new \Exception("Data is not instance of Response");
