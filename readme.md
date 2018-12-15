@@ -1,7 +1,7 @@
 # Lumen Cache Service
 
-[![](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg?style=flat-square)](https://github.com/FabrizioCafolla/cache-system)
-![](https://img.shields.io/badge/version-1.0.0--rc-green.svg)
+[![](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg)](https://github.com/FabrizioCafolla/cache-system)
+![](https://img.shields.io/badge/version-1.0.1--rc-green.svg)
 
 ![](https://img.shields.io/badge/package-laravel-orange.svg)
 ![](https://img.shields.io/badge/package-lumen-orange.svg)
