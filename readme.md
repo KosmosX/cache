@@ -13,7 +13,7 @@ This package is useful for better managing the File or Redis cache. Implements t
 
 ##### Install & Configuration
     
-    composer require fabrizio-cafolla /lumen-cache-service
+    composer require fabrizio-cafolla/cache-system
 
 You must enter the following provider in the bootstrap/app.php file:
 Uncomment the function 
