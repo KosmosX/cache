@@ -18,7 +18,7 @@ This package is useful for better managing the File or Redis cache. Implements t
 You must enter the following provider in the bootstrap/app.php file:
 Uncomment the function 
     
-    $app->whitFacades();
+    $app->withFacades();
 
 Load configuration in boostrap file
 
