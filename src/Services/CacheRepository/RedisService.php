@@ -30,13 +30,16 @@
 		 * Method for creating multiple items in the cache
 		 * Example ['key' => $value, 'key2' => $value2]
 		 *
-		 * @param array $values
-		 * @param int $minutes
+		 * @param array  $values
+		 * @param int    $time
+		 * @param string $options
+		 *
+		 * @throws \Exception
 		 */
-		public function setMany(array $values, $minutes = 0): void
+		public function setMany(array $values, $time = 60, string $options = "ex"): void
 		{
 			foreach ($values as $key => $data)
-				$this->set($key, $data, $minutes);
+				$this->set($key, $data, $time, $options);
 		}
 
 		/**
@@ -44,15 +47,17 @@
 		 * If you want to cache response you pass the $data parameter as a Response instance
 		 *
 		 * @param string $key
-		 * @param $data
-		 * @param int $minutes
-		 * @return mixed
+		 * @param        $data
+		 * @param int    $time
+		 * @param string $options
+		 *
+		 * @throws \Exception
 		 */
-		public function set(string $key, $data, int $minutes = 0): void
+		public function set(string $key, $data, int $time = 60, string $options = "ex"): void
 		{
 			$rawData = $this->_serializeData($data);
 
-			$this->manager->set($key, $rawData, $minutes);
+			$this->manager->set($key, $rawData, $options, $time);
 		}
 
 		/**
