@@ -16,9 +16,6 @@ class CacheBuilder
      */
     public function file(SerializerInterface $serializer = null): CommandInterface
     {
-        if (null == $serializer)
-            $serializer = new DefaultSerializer();
-
         return new FileCommand($serializer ?: new DefaultSerializer());
     }
 
