@@ -6,9 +6,9 @@ use CacheSystem\Serializer\Interfaces\SerializerInterface;
 
 interface CommandInterface
 {
-    //function set(string $key, $data, int $minutes = 0): self;
+    function set(string $key, $data, int $minutes = 0);
 
-    //function setMany(array $values, $minutes = 0): self;
+    function setMany(array $values, int $minutes = 0);
 
     function get($key, ?SerializerInterface $serializer = null);
 

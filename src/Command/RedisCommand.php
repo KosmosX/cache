@@ -23,7 +23,7 @@ class RedisCommand extends MainFunction implements CommandInterface
      * @param array $values
      * @param int $minutes
      */
-    public function setMany(array $values, $minutes = 0): self
+    public function setMany(array $values, int $minutes = 0)
     {
         foreach ($values as $key => $data)
             $this->set($key, $data, $minutes);
@@ -40,7 +40,7 @@ class RedisCommand extends MainFunction implements CommandInterface
      * @param int $minutes
      * @return mixed
      */
-    public function set(string $key, $data, int $minutes = 0): self
+    public function set(string $key, $data, int $minutes = 0)
     {
         $rawData = $this->_serializeData($data);
 

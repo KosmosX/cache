@@ -17,7 +17,7 @@ class FileCommand extends MainFunction implements CommandInterface
         parent::__construct(app('cache'), $serializer);
     }
 
-    public function setMany(array $values, int $minutes = 0): self
+    public function setMany(array $values, int $minutes = 0)
     {
         foreach ($values as $key => $data)
             $this->set($key, $data, $minutes);
@@ -25,7 +25,7 @@ class FileCommand extends MainFunction implements CommandInterface
         return $this;
     }
 
-    public function set(string $key, $data, int $minutes = 0): self
+    public function set(string $key, $data, int $minutes = 0)
     {
         $rawData = $this->_serializeData($data);
 
