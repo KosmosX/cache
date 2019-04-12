@@ -13,6 +13,6 @@
 	{
 		protected static function getFacadeAccessor()
 		{
-			return 'cache.redis';
+			return 'service.cache.redis';
 		}
 	}

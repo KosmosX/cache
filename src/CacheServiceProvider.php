@@ -8,7 +8,8 @@
 
 	namespace CacheSystem;
 
-	use Illuminate\Support\ServiceProvider;
+	use CacheSystem\Services\CacheBuilder;
+    use Illuminate\Support\ServiceProvider;
 	use CacheSystem\Services\CacheService;
 	use CacheSystem\Services\CacheRepository\FileService;
 	use CacheSystem\Services\CacheRepository\RedisService;
@@ -35,8 +36,8 @@
 		 */
 		public function register()
 		{
-			$this->app->bind('service.cache', function ($app) {
-				return new CacheService();
+			$this->app->bind('service.cache.builder', function ($app) {
+				return new CacheBuilder();
 			});
 
 			$this->app->bind('service.cache.file', function ($app) {
@@ -55,6 +56,6 @@
 		 */
 		public function provides()
 		{
-			return ['service.cache', 'service.cache.file', 'service.cache.redis'];
+			return ['service.cache.builder', 'service.cache.file', 'service.cache.redis'];
 		}
 	}

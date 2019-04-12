@@ -13,6 +13,6 @@
 	{
 		protected static function getFacadeAccessor()
 		{
-			return 'cache.file';
+			return 'service.cache.file';
 		}
 	}

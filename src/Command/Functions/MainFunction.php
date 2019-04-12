@@ -6,16 +6,16 @@
 	 * Time: 16.30
 	 */
 
-	namespace CacheSystem\Services\CacheRepository;
+	namespace CacheSystem\Command\Functions;
 
-	use CacheSystem\Traits\RawDataHelpers;
-	use CacheSystem\Traits\SerializeHelpers;
+	use CacheSystem\Command\Functions\Traits\RawDataHelpers;
+	use CacheSystem\Command\Functions\Traits\SerializeHelpers;
 
 	/**
 	 * Class CacheAbstract
 	 * @package App\Services\Cache\CacheAbstract
 	 */
-	abstract class CacheAbstract
+	abstract class MainFunction
 	{
 		use SerializeHelpers, RawDataHelpers;
 
@@ -46,7 +46,7 @@
 		 *
 		 * @return $this
 		 */
-		public function withSerializer($serializer): CacheAbstract
+		public function withSerializer($serializer): self
 		{
 			$this->_setSerializer($serializer);
 			return $this;
@@ -57,7 +57,7 @@
 		 *
 		 * @return \Laravel\Lumen\Application|mixed
 		 */
-		public function manager()
+		public function manager(): object
 		{
 			return $this->manager;
 		}

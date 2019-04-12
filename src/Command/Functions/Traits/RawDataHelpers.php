@@ -6,7 +6,7 @@
 	 * Time: 22.26
 	 */
 
-	namespace CacheSystem\Traits;
+	namespace CacheSystem\Command\Functions\Traits;
 
 	trait RawDataHelpers
 	{

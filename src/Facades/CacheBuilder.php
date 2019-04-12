@@ -9,10 +9,10 @@
 
 	use Illuminate\Support\Facades\Facade;
 
-	class CacheService extends Facade
+	class CacheBuilder extends Facade
 	{
 		protected static function getFacadeAccessor()
 		{
-			return 'cache.service';
+			return 'service.cache.builder';
 		}
 	}
