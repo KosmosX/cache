@@ -16,17 +16,18 @@
 	{
 		const SERIALIZER = CollectSerializer::class;
 
-		public function make($data): ?string
+		public function make($data, bool $isRawData = false): ?string
 		{
 			if (!($data instanceof Collection))
 				throw new \Exception("Data is not instance of Collection");
 
-			return $this->_serialize($data, false, self::SERIALIZER);
+			return $this->_serialize($data, $isRawData, self::SERIALIZER);
 		}
 
-		public function get($rawData)
+		public function get()
 		{
-			$data = $this->_unserialize($rawData,'data');
+			$data = $this->_unserialize('data');
+
 			return collect($data['data']);
 		}
 	}

@@ -56,11 +56,11 @@ class RedisCommand extends MainFunction implements CommandInterface
      * @param array $keys
      * @return mixed
      */
-    public function getMany(array $keys): ?array
+    public function getMany(array $keys, ?SerializerInterface $serializer = null): array
     {
         $data = array();
         foreach ($keys as $key)
-            $data[$key] = $this->get($key);
+            $data[$key] = $this->get($key, $serializer);
         return $data;
     }
 
@@ -70,10 +70,10 @@ class RedisCommand extends MainFunction implements CommandInterface
      * @param $key
      * @return $this|string|Response
      */
-    public function get($key, bool $DETECT_SERIALIZER = true)
+    public function get($key, ?SerializerInterface $serializer = null)
     {
         $rawData = $this->manager->get($key);
-        return $this->_unserializeData($rawData, $DETECT_SERIALIZER);
+        return $this->_unserializeData($rawData, $serializer);
     }
 
     /**

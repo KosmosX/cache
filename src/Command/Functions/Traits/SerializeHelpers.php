@@ -14,96 +14,41 @@ use CacheSystem\Serializer\Interfaces\SerializerInterface;
 trait SerializeHelpers
 {
     /**
-     * Raw data retrieved from stored cache
-     *
-     * @var string
-     */
-    protected $rawData;
-    /**
      * Class of Serializer to use
      *
      * @var
      */
     private $serializer;
 
+    private $autodetect = true;
+
     /**
-     * (Alias of _setSerializer())
-     * Serializer to use for cache
-     *
-     * @param $serializer
-     *
-     * @return $this
+     * @param bool $autodetect
      */
-    public function withSerializer(SerializerInterface $serializer): self
+    public function setAutodetect(bool $autodetect): self
     {
-        $this->_setSerializer($serializer);
+        $this->autodetect = $autodetect;
         return $this;
     }
-    
-    /**
-     * Get raw data of lastest item (put or get)
-     *
-     * @param bool $decode
-     *
-     * @return mixed|string
-     */
-    public function getRawData($only = NULL, bool $except = false, bool $decode = true): ?array
+
+    public function getAutodetect()
     {
-        if (false === $decode)
-            $this->rawData;
-
-        $args = $this->serializer->getArgs($this->rawData, $only, $except);
-        if (NULL === $args)
-            return NULL;
-
-        return $args;
+        return $this->autodetect;
     }
 
-    /**
+    /** Function in beta
+     *
      * @return null|string
-     */
-    public function getSerializer(): ?string
-    {
-        $serializer_class = $this->serializer->getSerializer($this->rawData);
-
-        if (NULL === $serializer_class)
-            return NULL;
-
-        return $serializer_class;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getCreatedAt(): ?string
-    {
-        $serializer_class = $this->serializer->getCreatedAt($this->rawData);
-
-        if (NULL === $serializer_class)
-            return NULL;
-
-        return $serializer_class;
-    }
-
-    /**
-     * @param string $rawData
+     * protected function _createdAt(): ?string
+     * {
+     *      $arg = $this->serializer->getArgs('created_at');
      *
-     * @throws \Exception
+     *      if (array_key_exists('created_ad', $arg))
+     *          return $arg['created_at'];
+     *
+     *      return null;
+     * }
      */
-    protected function _setRawData($rawData): void
-    {
-        if (NULL === $rawData) {
-            $this->rawData = json_encode(array("serializer" => "", "data" => [], "created_at" => ""), JSON_FORCE_OBJECT);
-            return;
-        }
-
-        json_decode($rawData);
-        if (0 !== json_last_error())
-            throw new \Exception("Serialized Data error json: " . json_last_error_msg());
-
-        $this->rawData = $rawData;
-    }
-
 
     /**
      * @param      $rawData
@@ -112,31 +57,18 @@ trait SerializeHelpers
      * @return mixed
      * @throws \Exception
      */
-    protected function _unserializeData($rawData, bool $DETECT_SERIALIZER = true)
+    protected function _unserializeData($rawData, ?SerializerInterface $serializer = null)
     {
-        $this->_setRawData($rawData);
+        $this->serializer->setRawData($rawData);
 
-        if (true === $DETECT_SERIALIZER)
-            $this->_detectSerializer();
+        if ($serializer instanceof SerializerInterface)
+            $this->setSerializer($serializer, $rawData);
+        else
+            $this->_detectSerializer($rawData);
 
-        $data = $this->serializer->get($rawData);
+        $data = $this->serializer->get();
 
         return $data;
-    }
-
-    /**
-     * Detect serializer of get cache and _set serializer attr
-     *
-     * @param $data
-     */
-    protected function _detectSerializer(): void
-    {
-        $serializer_of_cache = $this->getSerializer();
-
-        if (NULL === $serializer_of_cache)
-            return;
-        else if ($serializer_of_cache !== get_class($this->serializer))
-            $this->_setSerializer(new $serializer_of_cache());
     }
 
     /**
@@ -148,8 +80,22 @@ trait SerializeHelpers
     protected function _serializeData($data): ?string
     {
         $rawData = $this->serializer->make($data);
-        $this->_setRawData($rawData);
         return $rawData;
+    }
+
+    /**
+     * Detect serializer of get cache and _set serializer attr
+     *
+     * @param $data
+     */
+    protected function _detectSerializer($rawData): void
+    {
+        if (false === $this->autodetect)
+            return;
+
+        $arg = $this->serializer->getArgs('serializer');
+        if (array_key_exists('serializer', $arg) && $arg['serializer'] !== get_class($this->serializer))
+            $this->serializer = new $arg['serializer']($rawData);
     }
 
     /**
@@ -157,8 +103,13 @@ trait SerializeHelpers
      *
      * @param $serializer
      */
-    protected function _setSerializer(SerializerInterface $serializer): void
+    public function setSerializer(SerializerInterface $serializer, $rawData = null): self
     {
         $this->serializer = $serializer;
+
+        if (null != $rawData)
+            $this->serializer->setRawData($rawData);
+
+        return $this;
     }
 }

@@ -37,18 +37,18 @@ class FileCommand extends MainFunction implements CommandInterface
         return $this;
     }
 
-    public function getMany(array $keys): ?array
+    public function getMany(array $keys, ?SerializerInterface $serializer = null): array
     {
         $data = array();
         foreach ($keys as $key)
-            $data[$key] = $this->get($key);
+            $data[$key] = $this->get($key, $serializer);
         return $data;
     }
 
-    public function get($key, bool $DETECT_SERIALIZER = true)
+    public function get($key, ?SerializerInterface $serializer = null)
     {
         $rawData = $this->manager->get($key);
-        return $this->_unserializeData($rawData, $DETECT_SERIALIZER);
+        return $this->_unserializeData($rawData, $serializer);
     }
 
     public function forgetMany($keys, ...$otherKeys): array
@@ -59,7 +59,7 @@ class FileCommand extends MainFunction implements CommandInterface
             $forgets = (array)$keys;
         if (!empty($otherKeys))
             $forgets = array_unique(array_merge($forgets, $otherKeys));
-        unset($keys,$otherKeys);
+        unset($keys, $otherKeys);
 
         $checks = array();
         foreach ($forgets as $index => $key)

@@ -1,112 +1,98 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: fabrizio
-	 * Date: 22/10/18
-	 * Time: 19.39
-	 */
+/**
+ * Created by PhpStorm.
+ * User: fabrizio
+ * Date: 22/10/18
+ * Time: 19.39
+ */
 
-	namespace CacheSystem\Serializer\Abstracts;
+namespace CacheSystem\Serializer\Abstracts;
 
-    use Symfony\Component\HttpKernel\Exception\HttpException;
-	use Carbon\Carbon;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Carbon\Carbon;
 
-	class Serializer
-	{
-		const SERIALIZER = self::SERIALIZER;
+class Serializer
+{
+    const SERIALIZER = self::SERIALIZER;
 
-		/**
-		 * Get Serializer used for cached data
-		 *
-		 * @param $rawData
-		 *
-		 * @return null|string
-		 * @throws \Exception
-		 */
-		public function getSerializer($rawData): ?string
-		{
-			$data = $this->_unserialize($rawData,'serializer');
-			if (empty($data['serializer']))
-				return NULL;
-			return $data['serializer'];
-		}
+    protected $rawData;
 
-		/**
-		 * @param $rawData
-		 *
-		 * @return null|string
-		 * @throws \Exception
-		 */
-		public function getCreatedAt($rawData): ?string
-		{
-			$data = $this->_unserialize($rawData,'created_at');
-			if (null === $data)
-				return NULL;
-			return $data['created_at'];
-		}
+    public function __construct($rawData = null)
+    {
+        $this->rawData = $rawData;
+    }
 
-		/**
-		 * @param      $rawData
-		 * @param null $only
-		 * @param bool $except
-		 *
-		 * @return array
-		 * @throws \Exception
-		 */
-		public function getArgs($rawData, $only = NULL, bool $except = false): array {
-			$args = $this->_unserialize($rawData,$only,$except);
-			if (null === $args)
-				return NULL;
-			return $args;
-		}
+    /**
+     * @param $rawData
+     *
+     * @return null|string
+     * @throws \Exception
+     */
+    public function getArgs($args = null): array
+    {
+        $args = $this->_unserialize($args);
 
-		/**
-		 * Unserialize cache and return array with Serializer and $data
-		 *
-		 * @param      $rawData
-		 * @param null $only
-		 * @param bool $except
-		 *
-		 * @return array
-		 * @throws \Exception
-		 */
-		protected function _unserialize($rawData, $only = NULL, bool $except = false): ?array
-		{
-			try {
-				$data = json_decode($rawData, true);
-			} catch (\Exception $e) {
-				throw new \Exception("Serialized Data error json: " . json_last_error_msg());
-			}
+        return $args;
+    }
 
-			if (is_array($only))
-				foreach ($only as $key)
-					if (!array_key_exists($key, $data))
-						array_forget($only, $key);
+    public function setRawData($rawData = null): void
+    {
+        if (is_string($rawData)) {
+            json_decode($rawData);
 
-			if (NULL != $only && !empty($data)) {
-				if (true === $except)
-					return array_except($data, $only);
-				else
-					return array_only($data, $only);
-			}
+            if (0 !== json_last_error())
+                throw new \Exception("Serialized Data error json: " . json_last_error_msg());
+        } else {
+            $rawData = json_encode(array("serializer" => "", "data" => [], "created_at" => ""), JSON_FORCE_OBJECT);
+        }
 
-			return $data;
-		}
+        $this->rawData = $rawData;
+    }
 
-		/**
-		 * Create array with type of Serializer and $data, in json encode
-		 *
-		 * @param        $rawData
-		 * @param bool   $serialized
-		 * @param string $serializer
-		 *
-		 * @return null|string
-		 */
-		protected function _serialize($data, bool $just_raw_data = false, string $serializer = DefaultSerializer::class): ?string
-		{
-			if(false === $just_raw_data)
-				$rawData = array('serializer' => $serializer, 'data' => $data, 'created_at' => Carbon::now()->toDateTimeString());
+    /**
+     * Unserialize cache and return array with Serializer and $data
+     *
+     * @param      $rawData
+     * @param null|array|string $only
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function _unserialize($only = null): array
+    {
+        try {
+            $data = json_decode($this->rawData, true);
+        } catch (\Exception $e) {
+            throw new \Exception("Serialized Data error json: " . json_last_error_msg());
+        }
 
-			return json_encode(isset($rawData)?$rawData:$data, JSON_FORCE_OBJECT);
-		}
-	}
+        if (!empty($data) && (!empty($only) || null != $only)) {
+            if (is_string($only))
+                $only = (array)$only;
+            return array_only($data, $only);
+        }
+
+        return is_array($data) ?: array();
+    }
+
+    /**
+     * Create array with type of Serializer and $data, in json encode
+     *
+     * @param        $rawData
+     * @param bool $serialized
+     * @param string $serializer
+     *
+     * @return null|string
+     */
+    protected function _serialize($data, bool $isRawData = false, string $serializer = DefaultSerializer::class): ?string
+    {
+        if (false === $isRawData)
+            $data = array('serializer' => $serializer, 'data' => $data, 'created_at' => Carbon::now()->toDateTimeString());
+
+        $rawData = json_encode($data, JSON_FORCE_OBJECT);
+
+        $this->setRawData($rawData);
+
+        return $rawData;
+    }
+}

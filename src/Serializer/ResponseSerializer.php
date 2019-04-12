@@ -15,7 +15,7 @@
 	{
 		const SERIALIZER = ResponseSerializer::class;
 
-		public function make($data): ?string
+		public function make($data, bool $isRawData = false): ?string
 		{
 			if (!($data instanceof \Symfony\Component\HttpFoundation\Response))
 				throw new \Exception("Data is not instance of Response");
@@ -26,12 +26,12 @@
 				'content' => $data->getContent(),
 			];
 
-			return $this->_serialize($data, false,self::SERIALIZER);
+			return $this->_serialize($data, $isRawData,self::SERIALIZER);
 		}
 
-		public function get($rawData)
+		public function get()
 		{
-			$data = $this->_unserialize($rawData, 'data');
+			$data = $this->_unserialize('data');
 			$data = $data['data'];
 
 			if (class_exists(\ResponseHTTP\Response\HttpResponse::class))

@@ -37,7 +37,7 @@
 		public function __construct($service, SerializerInterface $serializer)
 		{
 			$this->manager = $service;
-			$this->_setSerializer($serializer);
+			$this->setSerializer($serializer);
 		}
 
 		/**

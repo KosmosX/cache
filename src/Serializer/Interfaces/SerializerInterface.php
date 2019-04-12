@@ -4,7 +4,7 @@ namespace CacheSystem\Serializer\Interfaces;
 
 interface SerializerInterface
 {
-    function get($rawData);
+    function get();
 
-    function make($data): ?string;
+    function make($data, bool $isRawData = false): ?string;
 }
