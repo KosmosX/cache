@@ -8,9 +8,10 @@
 
 	namespace CacheSystem\Serializer;
 
-	use CacheSystem\Serializer\SerializerAbstract;
+    use CacheSystem\Serializer\Abstracts\Serializer;
+    use CacheSystem\Serializer\Interfaces\SerializerInterface;
 
-	class ResponseSerializer extends SerializerAbstract
+    class ResponseSerializer extends Serializer implements SerializerInterface
 	{
 		const SERIALIZER = ResponseSerializer::class;
 

@@ -4,12 +4,17 @@ namespace CacheSystem\Command;
 
 use CacheSystem\Command\Functions\MainFunction;
 use CacheSystem\Command\Interfaces\CommandInterface;
+use CacheSystem\Serializer\Interfaces\SerializerInterface;
 
 class FileCommand extends MainFunction implements CommandInterface
 {
-    public function __construct(string $serializer)
+    /**
+     * FileCommand constructor.
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(SerializerInterface $serializer)
     {
-        parent::__construct('cache', $serializer);
+        parent::__construct(app('cache'), $serializer);
     }
 
     public function setMany(array $values, int $minutes = 0): self

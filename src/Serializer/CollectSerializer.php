@@ -8,10 +8,11 @@
 
 	namespace CacheSystem\Serializer;
 
-	use CacheSystem\Serializer\SerializerAbstract;
-	use Illuminate\Support\Collection;
+    use CacheSystem\Serializer\Abstracts\Serializer;
+    use CacheSystem\Serializer\Interfaces\SerializerInterface;
+    use Illuminate\Support\Collection;
 
-	class CollectSerializer extends SerializerAbstract
+	class CollectSerializer extends Serializer implements SerializerInterface
 	{
 		const SERIALIZER = CollectSerializer::class;
 

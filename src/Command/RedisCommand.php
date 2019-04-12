@@ -4,15 +4,16 @@ namespace CacheSystem\Command;
 
 use CacheSystem\Command\Functions\MainFunction;
 use CacheSystem\Command\Interfaces\CommandInterface;
+use CacheSystem\Serializer\Interfaces\SerializerInterface;
 
 class RedisCommand extends MainFunction implements CommandInterface
 {
     /**
      * RedisService constructor.
      */
-    public function __construct(string $serializer)
+    public function __construct(SerializerInterface $serializer)
     {
-        parent::__construct('redis', $serializer);
+        parent::__construct(app('redis'), $serializer);
     }
 
     /**

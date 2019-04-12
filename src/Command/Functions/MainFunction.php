@@ -10,14 +10,16 @@
 
 	use CacheSystem\Command\Functions\Traits\RawDataHelpers;
 	use CacheSystem\Command\Functions\Traits\SerializeHelpers;
+    use CacheSystem\Serializer\Interfaces\SerializerInterface;
+    use CacheSystem\Serializer\ResponseSerializer;
 
-	/**
+    /**
 	 * Class CacheAbstract
 	 * @package App\Services\Cache\CacheAbstract
 	 */
 	abstract class MainFunction
 	{
-		use SerializeHelpers, RawDataHelpers;
+		use SerializeHelpers;
 
 		/**
 		 * Is class of service that manage cache
@@ -32,24 +34,10 @@
 		 * @param string $service
 		 * @param string $serializer
 		 */
-		public function __construct(string $service, string $serializer)
+		public function __construct($service, SerializerInterface $serializer)
 		{
-			$this->manager = app($service);
+			$this->manager = $service;
 			$this->_setSerializer($serializer);
-		}
-
-		/**
-		 * (Alias of _setSerializer())
-		 * Serializer to use for cache
-		 *
-		 * @param $serializer
-		 *
-		 * @return $this
-		 */
-		public function withSerializer($serializer): self
-		{
-			$this->_setSerializer($serializer);
-			return $this;
 		}
 
 		/**

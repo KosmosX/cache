@@ -6,18 +6,14 @@
 	 * Time: 19.39
 	 */
 
-	namespace CacheSystem\Serializer;
+	namespace CacheSystem\Serializer\Abstracts;
 
-	use Symfony\Component\HttpKernel\Exception\HttpException;
+    use Symfony\Component\HttpKernel\Exception\HttpException;
 	use Carbon\Carbon;
 
-	abstract class SerializerAbstract
+	class Serializer
 	{
 		const SERIALIZER = self::SERIALIZER;
-
-		abstract public function make($data);
-
-		abstract public function get($data);
 
 		/**
 		 * Get Serializer used for cached data

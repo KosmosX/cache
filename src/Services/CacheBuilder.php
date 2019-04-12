@@ -1,32 +1,33 @@
 <?php
+
 namespace CacheSystem\Services;
 
 use CacheSystem\Command\FileCommand;
 use CacheSystem\Command\Interfaces\CommandInterface;
 use CacheSystem\Command\RedisCommand;
 use CacheSystem\Serializer\DefaultSerializer;
+use CacheSystem\Serializer\Interfaces\SerializerInterface;
 
 class CacheBuilder
 {
     /**
-     * This method returns the class to be able to use the primitive methods and not those implemented by the Reids Cache Repository
-     *
-     * use into controller: $this->cache->file()-> any method that class implement
-     *
-     * @return \Illuminate\Cache\CacheManager
+     * @param SerializerInterface|null $serializer
+     * @return CommandInterface
      */
-    public function file(string $serializer = DefaultSerializer::class) :CommandInterface{
-        return new FileCommand($serializer);
+    public function file(SerializerInterface $serializer = null): CommandInterface
+    {
+        if (null == $serializer)
+            $serializer = new DefaultSerializer();
+
+        return new FileCommand($serializer ?: new DefaultSerializer());
     }
 
     /**
-     * This method returns the class to be able to use the primitive methods and not those implemented by the Reids Cache Repository
-     *
-     * use into controller: $this->cache->redis()-> any method that class implement
-     *
-     * @return Redis
+     * @param SerializerInterface|null $serializer
+     * @return CommandInterface
      */
-    public function redis(string $serializer = DefaultSerializer::class) :CommandInterface{
-        return new RedisCommand($serializer);
+    public function redis(SerializerInterface $serializer = null): CommandInterface
+    {
+        return new RedisCommand($serializer ?: new DefaultSerializer());
     }
 }
