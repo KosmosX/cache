@@ -36,6 +36,8 @@
 		 */
 		public function register()
 		{
+			$this->app->register(\CacheSystem\CacheServiceProvider::class);
+
 			$this->app->bind('service.cache.builder', function ($app) {
 				return new CacheBuilder();
 			});
