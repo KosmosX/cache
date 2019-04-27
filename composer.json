@@ -1,5 +1,5 @@
 {
-    "name": "fabrizio-cafolla/cache-system",
+    "name": "cosmo-microservice/cache-system",
     "description": "Cache service for Lumen Framework.",
     "keywords": ["framework", "laravel", "lumen", "cache", "redis"],
     "license": "MIT",
