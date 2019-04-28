@@ -6,13 +6,13 @@
 	 * Time: 14.15
 	 */
 
-	namespace CacheSystem;
+	namespace Kosmosx\Cache;
 
-	use CacheSystem\Services\CacheBuilder;
+	use Kosmosx\Cache\Services\CacheBuilder;
     use Illuminate\Support\ServiceProvider;
-	use CacheSystem\Services\CacheService;
-	use CacheSystem\Services\CacheRepository\FileService;
-	use CacheSystem\Services\CacheRepository\RedisService;
+	use Kosmosx\Cache\Services\CacheService;
+	use Kosmosx\Cache\Services\CacheRepository\FileService;
+	use Kosmosx\Cache\Services\CacheRepository\RedisService;
 
 	class CacheServiceProvider extends ServiceProvider
 	{

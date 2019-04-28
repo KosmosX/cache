@@ -1,12 +1,12 @@
 <?php
 
-namespace CacheSystem\Services;
+namespace Kosmosx\Cache\Services;
 
-use CacheSystem\Command\FileCommand;
-use CacheSystem\Command\Interfaces\CommandInterface;
-use CacheSystem\Command\RedisCommand;
-use CacheSystem\Serializer\DefaultSerializer;
-use CacheSystem\Serializer\Interfaces\SerializerInterface;
+use Kosmosx\Cache\Command\FileCommand;
+use Kosmosx\Cache\Command\Interfaces\CommandInterface;
+use Kosmosx\Cache\Command\RedisCommand;
+use Kosmosx\Cache\Serializer\DefaultSerializer;
+use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
 
 class CacheBuilder
 {

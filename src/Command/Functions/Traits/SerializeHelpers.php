@@ -6,10 +6,10 @@
  * Time: 22.26
  */
 
-namespace CacheSystem\Command\Functions\Traits;
+namespace Kosmosx\Cache\Command\Functions\Traits;
 
-use CacheSystem\Command\Functions\MainFunction;
-use CacheSystem\Serializer\Interfaces\SerializerInterface;
+use Kosmosx\Cache\Command\Functions\MainFunction;
+use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
 
 trait SerializeHelpers
 {

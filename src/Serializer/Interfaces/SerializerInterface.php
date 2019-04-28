@@ -1,6 +1,6 @@
 <?php
 
-namespace CacheSystem\Serializer\Interfaces;
+namespace Kosmosx\Cache\Serializer\Interfaces;
 
 interface SerializerInterface
 {

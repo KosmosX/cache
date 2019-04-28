@@ -13,7 +13,7 @@ This package is useful for better managing the File or Redis cache. Implements t
 
 ##### Install & Configuration
     
-    composer require fabrizio-cafolla/cache-system
+    composer require kosmosx/cache
 
 You must enter the following provider in the bootstrap/app.php file:
 Uncomment the function 
@@ -27,16 +27,16 @@ Load configuration in boostrap file
 Or publish config in your Service Provider
 
     $this->publishes([
-        'CacheSystem/config/cache.php' => config_path('cache.php')
+        'Kosmosx/Cache/config/cache.php' => config_path('cache.php')
     ], 'config');
     
     $this->publishes([
-        'CacheSystem/config/database.php' => config_path('database.php')
+        'Kosmosx/Cache/config/database.php' => config_path('database.php')
     ], 'config');
     
 Register service provider 
     
-    $app->register(CacheSystem\CacheServiceProvider::class);
+    $app->register(Kosmosx\Cache\CacheServiceProvider::class);
 
 #### Documentation
 Once you have cofigured using it:
@@ -102,8 +102,8 @@ it is possible to use typed serializers, so that when it is recovered it is poss
 
 If you want to create your own serializer, just create a class that extends SerializerAbstract
 
-    use CacheSystem\Serializer\Abstracts\Serializer;
-    use CacheSystem\Serializer\Interfaces\SerializerInterface;
+    use Kosmosx\Cache\Serializer\Abstracts\Serializer;
+    use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
         
     class {name} extends Serializer implements SerializerInterface
 

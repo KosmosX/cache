@@ -1,6 +1,6 @@
 {
-    "name": "cosmo-microservice/cache-system",
-    "description": "Cache service for Lumen Framework.",
+    "name": "kosmosx/cache",
+    "description": "Cache service for Laravel / Lumen Framework.",
     "keywords": ["framework", "laravel", "lumen", "cache", "redis"],
     "license": "MIT",
     "type": "lumen-package",
@@ -20,7 +20,7 @@
 
     "autoload": {
         "psr-4": {
-            "CacheSystem\\": "src/"
+            "Kosmosx\\Cache\\": "src/"
         }
     },
 
@@ -30,12 +30,12 @@
         },
         "laravel": {
             "providers": [
-                "CacheSystem\\CacheServiceProvider"
+                "Kosmosx\\Cache\\CacheServiceProvider"
             ],
             "aliases": {
-                "CacheService": "CacheSystem\\Facades\\CacheService",
-                "CacheFile": "CacheSystem\\Facades\\CacheFile",
-                "CacheRedis": "CacheSystem\\Facades\\CacheRedis"
+                "CacheBuilder": "Kosmosx\\Cache\\Facades\\CacheBuilder",
+                "CacheFile": "Kosmosx\\Cache\\Facades\\CacheFile",
+                "CacheRedis": "Kosmosx\\Cache\\Facades\\CacheRedis"
             }
         }
     }

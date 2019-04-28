@@ -1,10 +1,10 @@
 <?php
 
-namespace CacheSystem\Command;
+namespace Kosmosx\Cache\Command;
 
-use CacheSystem\Command\Functions\MainFunction;
-use CacheSystem\Command\Interfaces\CommandInterface;
-use CacheSystem\Serializer\Interfaces\SerializerInterface;
+use Kosmosx\Cache\Command\Functions\MainFunction;
+use Kosmosx\Cache\Command\Interfaces\CommandInterface;
+use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
 
 class FileCommand extends MainFunction implements CommandInterface
 {

@@ -6,10 +6,10 @@
 	 * Time: 19.38
 	 */
 
-	namespace CacheSystem\Serializer;
+	namespace Kosmosx\Cache\Serializer;
 
-    use CacheSystem\Serializer\Abstracts\Serializer;
-    use CacheSystem\Serializer\Interfaces\SerializerInterface;
+    use Kosmosx\Cache\Serializer\Abstracts\Serializer;
+    use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
 
     class ResponseSerializer extends Serializer implements SerializerInterface
 	{

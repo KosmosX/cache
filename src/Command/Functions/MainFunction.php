@@ -6,12 +6,12 @@
 	 * Time: 16.30
 	 */
 
-	namespace CacheSystem\Command\Functions;
+	namespace Kosmosx\Cache\Command\Functions;
 
-	use CacheSystem\Command\Functions\Traits\RawDataHelpers;
-	use CacheSystem\Command\Functions\Traits\SerializeHelpers;
-    use CacheSystem\Serializer\Interfaces\SerializerInterface;
-    use CacheSystem\Serializer\ResponseSerializer;
+	use Kosmosx\Cache\Command\Functions\Traits\RawDataHelpers;
+	use Kosmosx\Cache\Command\Functions\Traits\SerializeHelpers;
+    use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
+    use Kosmosx\Cache\Serializer\ResponseSerializer;
 
     /**
 	 * Class CacheAbstract

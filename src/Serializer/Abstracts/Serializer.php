@@ -6,7 +6,7 @@
  * Time: 19.39
  */
 
-namespace CacheSystem\Serializer\Abstracts;
+namespace Kosmosx\Cache\Serializer\Abstracts;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Carbon\Carbon;

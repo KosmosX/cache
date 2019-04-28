@@ -1,8 +1,8 @@
 <?php
 
-namespace CacheSystem\Command\Interfaces;
+namespace Kosmosx\Cache\Command\Interfaces;
 
-use CacheSystem\Serializer\Interfaces\SerializerInterface;
+use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
 
 interface CommandInterface
 {
