@@ -1,10 +1,6 @@
 # Cache System
 
-[![](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg)](https://github.com/FabrizioCafolla/cache-system)
-![](https://img.shields.io/badge/version-1.0.0--rc-green.svg)
-
-![](https://img.shields.io/badge/package-laravel-orange.svg)
-![](https://img.shields.io/badge/package-lumen-orange.svg)
+![](https://img.shields.io/badge/version-1.0.0-green.svg) ![](https://img.shields.io/badge/laravel->=5.7-blue.svg) ![](https://img.shields.io/badge/lumen->=5.7-blue.svg)
 
 ##### Why use it?
 >Manage your cache easily.
@@ -41,22 +37,22 @@ Register service provider
 #### Documentation
 Once you have cofigured using it:
 
-    $builder = app('service.cache.builder');    //CacheBuilder
-    $builderFile = $builder->file();        
-    $builderFile->set($key, $value, $ttl);
+    $factory = app('factory.cache');            //return CacheFactory
+    $builderFile = $factory->file();            //return FileBuilder
+    $builderRedis = $factory->redis();          //return RedisBuilder
         
     $file = app('service.cache.file');          //FileCommand
     $redis = app('service.cache.redis');        //RedisCommand
- 
 
 **SET**
 
-    //With builder obj  
-    $builderRedis = $builder->redis();
-    $builderRedis->set($key, $value, $ttl);
+    //If you use builder obj  
+    $builderRedis->default()->set($key, $value, $ttl);          //build FileCommand with DefaultSerializer and set cache
+    $builderRedis->response()->set($response, $value, $ttl);
+    $builderRedis->collect()->set($collect, $value, $ttl);
     
-    //With classes 
-    $file->put($key, $value, $ttl);
+    //With services 
+    $file->set($key, $value, $ttl);
     $redis->set($key, $value, $ttl);
 
 **SET MANY**
@@ -64,16 +60,12 @@ Once you have cofigured using it:
     //array example: ["key" => $value, "key2" => $value2 ...]
     //$ttl for all values
     
-    $builderFile->setMany(array $values, $ttl);
-    $builderRedis->setMany(array $values, $ttl);
+    $builderFile->default()->setMany(array $values, $ttl);
     
-    $file->putMany(array $values, $ttl);
+    $file->setMany(array $values, $ttl);
     $redis->setMany(array $values, $ttl);
     
 **GET**
-
-    $builderFile->get($key, $serializer);
-    $builderRedis->get($key, $serializer);
     
     $file->get($key, $serializer);
     $redis->get($key, $serializer);
@@ -82,9 +74,8 @@ Once you have cofigured using it:
 
     //array example: ["key", "key2", "keyN" ...]
     
-    $builderFile->getMany(array $keys);
-    
     $file->getMany(array $keys);
+    $redis->getMany(array $keys);
     
 **SERIALIZER**
 
