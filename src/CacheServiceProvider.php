@@ -8,8 +8,12 @@
 
 	namespace Kosmosx\Cache;
 
+	use Kosmosx\Cache\Command\FileCommand;
+	use Kosmosx\Cache\Command\RedisCommand;
+	use Kosmosx\Cache\Serializer\DefaultSerializer;
 	use Kosmosx\Cache\Services\CacheBuilder;
     use Illuminate\Support\ServiceProvider;
+	use Kosmosx\Cache\Services\CacheFactory;
 	use Kosmosx\Cache\Services\CacheService;
 	use Kosmosx\Cache\Services\CacheRepository\FileService;
 	use Kosmosx\Cache\Services\CacheRepository\RedisService;
@@ -41,16 +45,16 @@
 
 			}
 
-			$this->app->bind('service.cache.builder', function ($app) {
-				return new CacheBuilder();
+			$this->app->bind('factory.cache', function ($app) {
+				return new CacheFactory();
 			});
 
 			$this->app->bind('service.cache.file', function ($app) {
-				return new FileService();
+				return new FileCommand(new DefaultSerializer());
 			});
 
 			$this->app->bind('service.cache.redis', function ($app) {
-				return new RedisService();
+				return new RedisCommand(new DefaultSerializer());
 			});
 
 			$this->commands(\Kosmosx\Cache\Console\Commands\PublishConfig::class);

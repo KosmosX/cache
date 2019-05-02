@@ -34,8 +34,8 @@
 			$data = $this->_unserialize('data');
 			$data = $data['data'];
 
-			if (class_exists(\ResponseHTTP\Response\HttpResponse::class))
-				return new \ResponseHTTP\Response\HttpResponse($data['content'], $data['status'], $data['headers']);
+			if (class_exists(\Kosmosx\Response\RestResponse::class))
+				return new \Kosmosx\Response\RestResponse($data['content'], $data['status'], $data['headers']);
 
 			return response()->json($data['content'], $data['status'], $data['headers']);
 		}

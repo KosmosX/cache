@@ -23,11 +23,10 @@ class Serializer
     }
 
     /**
-     * @param $rawData
-     *
-     * @return null|string
-     * @throws \Exception
-     */
+	 * @param null $args
+	 * @return array
+	 * @throws \Exception
+	 */
     public function getArgs($args = null): array
     {
         $args = $this->_unserialize($args);
@@ -35,6 +34,10 @@ class Serializer
         return $args;
     }
 
+	/**
+	 * @param null $rawData
+	 * @throws \Exception
+	 */
     public function setRawData($rawData = null): void
     {
         if (is_string($rawData)) {
@@ -52,7 +55,6 @@ class Serializer
     /**
      * Unserialize cache and return array with Serializer and $data
      *
-     * @param      $rawData
      * @param null|array|string $only
      *
      * @return array
@@ -78,12 +80,12 @@ class Serializer
     /**
      * Create array with type of Serializer and $data, in json encode
      *
-     * @param        $rawData
-     * @param bool $serialized
-     * @param string $serializer
-     *
-     * @return null|string
-     */
+	 * @param $data
+	 * @param bool $isRawData
+	 * @param string $serializer
+	 * @return string|null
+	 * @throws \Exception
+	 */
     protected function _serialize($data, bool $isRawData = false, string $serializer = DefaultSerializer::class): ?string
     {
         if (false === $isRawData)
