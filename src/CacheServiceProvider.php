@@ -23,12 +23,6 @@
 		 */
 		protected $defer = true;
 
-		public function boot()
-		{
-			$this->app->alias('cache', 'Illuminate\Cache\CacheManager');
-			$this->app->register('Illuminate\Redis\RedisServiceProvider');
-		}
-
 		/**
 		 * Register the application services.
 		 *
@@ -36,6 +30,17 @@
 		 */
 		public function register()
 		{
+			$this->app->alias('cache', \Illuminate\Cache\CacheManager::class);
+
+			$this->app->register('Illuminate\Redis\RedisServiceProvider');
+
+			try {
+				$this->app->configure('cache');
+				$this->app->configure('database');
+			} catch (\Exception $e) {
+
+			}
+
 			$this->app->bind('service.cache.builder', function ($app) {
 				return new CacheBuilder();
 			});
@@ -47,6 +52,8 @@
 			$this->app->bind('service.cache.redis', function ($app) {
 				return new RedisService();
 			});
+
+			$this->commands(\Kosmosx\Cache\Console\Commands\PublishConfig::class);
 		}
 
 		/**
