@@ -12,7 +12,7 @@
 		 *
 		 * @var string
 		 */
-		protected $signature = 'kosmosx:publish:cache {--force : Overwrite any existing files.}';
+		protected $signature = 'kosmosx:config:cache {--force : Overwrite any existing files.}';
 
 		/**
 		 * The console command description.
