@@ -1,6 +1,6 @@
 <?php
 
-	namespace Kosmosx\Cache\Console\Commands;
+	namespace Kosmosx\Cache\Console;
 
 	use Illuminate\Console\Command;
 	use Illuminate\Filesystem\Filesystem;
@@ -19,7 +19,7 @@
 		 *
 		 * @var string
 		 */
-		protected $description = 'Publishes cache configuration file to config directory of app';
+		protected $description = 'Publishes cache configuration file into application config directory';
 
 		/**
 		 * Filesystem instance for fs operations

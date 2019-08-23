@@ -3,7 +3,6 @@
 	namespace Kosmosx\Cache\Services\Builder;
 
 	use Kosmosx\Cache\Command\Interfaces\CommandInterface;
-	use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
 
 	interface CacheBuilderInterface
 	{

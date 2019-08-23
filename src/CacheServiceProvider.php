@@ -57,7 +57,7 @@
 				return new RedisCommand(new DefaultSerializer());
 			});
 
-			$this->commands(\Kosmosx\Cache\Console\Commands\PublishConfig::class);
+			$this->commands(\Kosmosx\Cache\Console\PublishConfig::class);
 		}
 
 		/**

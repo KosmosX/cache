@@ -8,23 +8,14 @@
 
 namespace Kosmosx\Cache\Command\Functions\Traits;
 
-use Kosmosx\Cache\Command\Functions\MainFunction;
 use Kosmosx\Cache\Serializer\Interfaces\SerializerInterface;
 
 trait SerializeHelpers
 {
-    /**
-     * Class of Serializer to use
-     *
-     * @var
-     */
     private $serializer;
 
     private $autodetect = true;
 
-    /**
-     * @param bool $autodetect
-     */
     public function setAutodetect(bool $autodetect): self
     {
         $this->autodetect = $autodetect;
@@ -48,34 +39,27 @@ trait SerializeHelpers
      *
      *      return null;
      * }
-     */
-
-    /**
-     * @param      $rawData
-     * @param bool $DETECT_SERIALIZER
-     *
-     * @return mixed
-     * @throws \Exception
-     */
+	 *
+	 * @param $rawData
+	 * @param SerializerInterface|null $serializer
+	 * @return mixed
+	 */
     protected function _unserializeData($rawData, ?SerializerInterface $serializer = null)
     {
-        $this->serializer->setRawData($rawData);
-
         if ($serializer instanceof SerializerInterface)
             $this->setSerializer($serializer, $rawData);
+        elseif (true === $this->autodetect)
+            $this->setSerializerAutodetect($rawData);
         else
-            $this->_detectSerializer($rawData);
+			$this->serializer->setRawData($rawData);
 
-        $data = $this->serializer->get();
-
-        return $data;
+		return $this->serializer->get();
     }
 
     /**
      * @param $data
      *
      * @return mixed
-     * @throws \Exception
      */
     protected function _serializeData($data): ?string
     {
@@ -84,25 +68,31 @@ trait SerializeHelpers
     }
 
     /**
-     * Detect serializer of get cache and _set serializer attr
-     *
-     * @param $data
-     */
-    protected function _detectSerializer($rawData): void
+     * autodetect serializer from cached data
+	 *
+	 * @param null $rawData
+	 */
+    public function setSerializerAutodetect($rawData = null): void
     {
-        if (false === $this->autodetect)
-            return;
+        $args = $this->serializer->getArgs('serializer');
 
-        $arg = $this->serializer->getArgs('serializer');
-        if (array_key_exists('serializer', $arg) && $arg['serializer'] !== get_class($this->serializer))
-            $this->serializer = new $arg['serializer']($rawData);
+        if (array_key_exists('serializer', $args) && $args['serializer'] !== get_class($this->serializer)){
+			try {
+				if((new $args['serializer']) instanceof SerializerInterface)
+					$this->serializer = new $args['serializer']($rawData);
+			} catch (\Exception $e) {
+				throw new $e;
+			}
+		}
     }
 
     /**
      * Private function to _set Serializer
-     *
-     * @param $serializer
-     */
+	 *
+	 * @param SerializerInterface $serializer
+	 * @param null $rawData
+	 * @return SerializeHelpers
+	 */
     public function setSerializer(SerializerInterface $serializer, $rawData = null): self
     {
         $this->serializer = $serializer;
