@@ -12,14 +12,14 @@
 		 *
 		 * @var string
 		 */
-		protected $signature = 'kosmosx:config:cache {--force : Overwrite any existing files.}';
+		protected $signature = 'publish:kosmosx:cache {--force : Overwrite any existing files.}';
 
 		/**
 		 * The console command description.
 		 *
 		 * @var string
 		 */
-		protected $description = 'Publishes cache configuration file into application config directory';
+		protected $description = 'Publishe cache configuration file into application config directory';
 
 		/**
 		 * Filesystem instance for fs operations

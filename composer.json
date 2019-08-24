@@ -16,7 +16,7 @@
         "laravel/lumen-framework": ">=5.7",
         "illuminate/redis": ">=5.7",
         "predis/predis": "^1.1",
-        "kosmosx/helpers": "1.0.*"
+        "kosmosx/helpers": "~1.0"
     },
 
     "autoload": {

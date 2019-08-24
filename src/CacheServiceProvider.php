@@ -12,7 +12,7 @@
 	use Kosmosx\Cache\Command\RedisCommand;
 	use Kosmosx\Cache\Serializer\DefaultSerializer;
 	use Kosmosx\Cache\Services\CacheBuilder;
-    use Illuminate\Support\ServiceProvider;
+	use Illuminate\Support\ServiceProvider;
 	use Kosmosx\Cache\Services\CacheFactory;
 	use Kosmosx\Cache\Services\CacheService;
 	use Kosmosx\Cache\Services\CacheRepository\FileService;
@@ -34,7 +34,7 @@
 		 */
 		public function register()
 		{
-			$this->app->alias('cache', \Illuminate\Cache\CacheManager::class);
+			register_alias('cache', \Illuminate\Cache\CacheManager::class);
 
 			$this->app->register('Illuminate\Redis\RedisServiceProvider');
 
@@ -42,7 +42,7 @@
 				$this->app->configure('cache');
 				$this->app->configure('database');
 			} catch (\Exception $e) {
-
+				throw new $e;
 			}
 
 			$this->app->bind('factory.cache', function ($app) {
@@ -67,6 +67,10 @@
 		 */
 		public function provides()
 		{
-			return ['service.cache.builder', 'service.cache.file', 'service.cache.redis'];
+			return [
+				'service.cache.builder',
+				'service.cache.file',
+				'service.cache.redis'
+			];
 		}
 	}
